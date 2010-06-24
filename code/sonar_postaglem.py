@@ -22,7 +22,7 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
         print doc.filename + '\tPROCESSING'
         for sentence in doc.sentences():
                 words = " ".join([ x.text for x in sentence ])
-		print words
+                print words
 
                 process_sentence = False
                 for x in sentence:
@@ -30,7 +30,7 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
                         process_sentence = True
                 if process_sentence:
                     processed_doc = True
-                    for i, (word, pos,lemma, morph) in enumerate(tadpoleclient.process(words)):
+                    for i, (word, lemma, morph, pos) in enumerate(tadpoleclient.process(words)):
                         word_id = sentence[i].attrib[ns('xml') + 'id']
                         if pos:
                             doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
