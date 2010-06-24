@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from pynlpl.input.sonar import CorpusX, CorpusDocumentX
+from pynlpl.formats.sonar import CorpusX, CorpusDocumentX
 from pynlpl.client import TadpoleClient
 import sys
 import os.path
