@@ -8,7 +8,7 @@ import os.path
 
 
 
-#Make sure Tadpole/Frog server runs with tokeniser *DISABLED* !
+#Make sure Tadpole/Frog server runs with tokeniser and MWU *DISABLED* !
 tadpoleclient = TadpoleClient('localhost',12345) 
 
 if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]):
@@ -22,7 +22,6 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
         print doc.filename + '\tPROCESSING'
         for sentence in doc.sentences():
                 words = " ".join([ x.text for x in sentence ])
-                print words
 
                 process_sentence = False
                 for x in sentence:
