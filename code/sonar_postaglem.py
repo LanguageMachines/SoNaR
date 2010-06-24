@@ -30,7 +30,11 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
                 if process_sentence:
                     processed_doc = True
                     for i, (word, lemma, morph, pos) in enumerate(tadpoleclient.process(words)):
-                        word_id = sentence[i].attrib[ns('xml') + 'id']
+                        try:
+                            word_id = sentence[i].attrib[ns('xml') + 'id']
+                        except: 
+                            print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id']
+                            break
                         if pos:
                             doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
                         if lemma:
