@@ -22,6 +22,8 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
         print doc.filename + '\tPROCESSING'
         for sentence in doc.sentences():
                 words = " ".join([ x.text for x in sentence ])
+		print words
+
                 process_sentence = False
                 for x in sentence:
                     if not ns('dcoi') + 'pos' in x.attrib or not ns('dcoi') + 'lemma' in x.attrib:
