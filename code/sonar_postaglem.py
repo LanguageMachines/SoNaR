@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from pynlpl.formats.sonar import CorpusX, CorpusDocumentX
+from pynlpl.formats.sonar import CorpusX, CorpusDocumentX, ns
 from pynlpl.clients.tadpoleclient import TadpoleClient
 import sys
 import os.path
@@ -20,20 +20,20 @@ for doc in CorpusX(sonardir,'tok'): #read the *.tok files
     processed_doc = False
     if not os.path.exists(doc.filename+'.pos'):
         print doc.filename + '\tPROCESSING'
-        for sentence_id, sentence in doc.sentences():
-                words = " ".join([ x[0] for x in sentence ])
+        for sentence in doc.sentences():
+                words = " ".join([ x.text for x in sentence ])
                 process_sentence = False
                 for x in sentence:
-                    if not x[2] or x[3]:
+                    if not ns('dcoi') + 'pos' in x.attrib or not ns('dcoi') + 'lemma' in x.attrib:
                         process_sentence = True
                 if process_sentence:
                     processed_doc = True
-                    for i, (word, pos,lemma, morph) in enumerate(tadpoleclient.process(sentence)):
-                        word_id = sentence[i][1]
+                    for i, (word, pos,lemma, morph) in enumerate(tadpoleclient.process(words)):
+                        word_id = sentence[i].attrib[ns('xml') + 'id']
                         if pos:
-                            doc[word_id].attrib['pos'] = pos
+                            doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
                         if lemma:
-                            doc[word_id].attrib['lemma'] = lemma
+                            doc[word_id].attrib[ns('dcoi') + 'lemma'] = lemma
         if processed_doc:
             doc.save(doc.filename+'.pos') #write .tok.pos files
     else:
