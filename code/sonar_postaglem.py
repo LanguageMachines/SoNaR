@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 from pynlpl.formats.sonar import CorpusX, CorpusDocumentX
-from pynlpl.client import TadpoleClient
+from pynlpl.clients.tadpoleclient import TadpoleClient
 import sys
 import os.path
 
