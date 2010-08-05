@@ -12,8 +12,8 @@ class TagDoc(AbstractExperiment):
         super(TagDoc,self).__init__(data, **parameters)
     
     def start(self):
-        sonardoc, tadpoleport = self.data
-        print 'PROCESSING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        sonardoc, tadpoleport, count = self.data
+        print '#' +str(count) + ')\tPROCESSING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
 
 
@@ -34,12 +34,12 @@ for port in range(12350, 123450+poolsize):
 print "POPULATING POOL.."
 
 tadpoleport = 12349
-for doc in CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') ): #read the *.tok files, on condition there are no *.pos equivalents
+for i, doc in enumerate(CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
     tadpoleport += 1
     if tadpoleport == 12350 + poolsize: 
         tadpoleport = 12350
-    print 'QUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
-    pool.append( TagDoc((doc.filename, tadpoleport)) )
+    print '#' + str(i+1), + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
+    pool.append( TagDoc((doc.filename, tadpoleport, i+1)) )
 
 
 
