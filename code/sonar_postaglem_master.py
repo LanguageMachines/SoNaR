@@ -17,12 +17,13 @@ class TagDoc(AbstractExperiment):
         self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
 
 
-if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
+if len(sys.argv) == 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
     sonardir = sys.argv[1]
     poolsize = int(sys.argv[2])
     pool = ExperimentPool(poolsize)
 else:
     print >>sys.stderr,"Usage: ./sonar_postaglem_master.py [sonardir] [#processes] "
+    sys.exit(2)
 
 #start five tadpoles with tokeniser and MWU *DISABLED*, ports 12350 onward
 
