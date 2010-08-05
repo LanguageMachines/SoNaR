@@ -29,7 +29,7 @@ else:
 
 print "SPAWNING TADPOLES..."
 
-for port in range(12350, 12345+poolsize):
+for port in range(12350, 12350+poolsize):
     os.system('Tadpole --skip=tmp -S ' + str(port) + ' &')
 
 print "POPULATING POOL.."
