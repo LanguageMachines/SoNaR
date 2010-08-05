@@ -14,7 +14,7 @@ class TagDoc(AbstractExperiment):
     def start(self):
         sonardoc, tadpoleport = self.data
         print 'PROCESSING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.startcommand('sonar_postaglem_1.py', False,None,None, sonardoc.filename, tadpoleport)
+        self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
 
 
 if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
