@@ -9,14 +9,14 @@ import os.path
 
 if len(sys.argv) == 3 and sys.argv[2].isdigit():
     docname = sys.argv[1]
-    port = sys.argv[2]
+    port = int(sys.argv[2])
 else:
     print >>sys.stderr,"Usage: ./sonar_postaglem.py [sonar-root-directory]"
 
 #Make sure Tadpole/Frog server runs with tokeniser and MWU *DISABLED* !
 tadpoleclient = TadpoleClient('localhost',port) 
 
-doc = CorpusDocumentX(sys.argv[1])
+doc = CorpusDocumentX(docname)
 
 processed_doc = False
 for sentence in doc.sentences():
