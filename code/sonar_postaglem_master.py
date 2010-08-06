@@ -12,7 +12,7 @@ class TagDoc(AbstractExperiment):
         super(TagDoc,self).__init__(data, **parameters)
     
     def start(self):
-        sonardoc, tadpoleport, count = self.data
+        sonardoc, tadpoleport, count = self.inputdata
         print '#' +str(count) + ')\tSTARTING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
         sys.stdout.flush()
