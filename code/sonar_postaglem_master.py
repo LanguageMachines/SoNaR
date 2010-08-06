@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from pynlpl.formats.sonar import CorpusX
+from pynlpl.formats.sonar import CorpusFiles
 from pynlpl.evaluation import ExperimentPool, AbstractExperiment
 import sys
 import os.path
@@ -38,7 +38,7 @@ for port in ports:
 print "POPULATING POOL.."
 
 tadpoleport = 12349
-for i, doc in enumerate(CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
+for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
     tadpoleport += 1
     if tadpoleport == 12350 + poolsize:
         tadpoleport = 12350
