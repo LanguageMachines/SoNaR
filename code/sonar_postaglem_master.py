@@ -42,8 +42,8 @@ for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exi
     tadpoleport += 1
     if tadpoleport == 12350 + poolsize:
         tadpoleport = 12350
-    print '#' + str(i+1) + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
-    pool.append( TagDoc((doc.filename, tadpoleport, i+1)) )
+    print '#' + str(i+1) + ')\tQUEING\t' + doc + ' [' + str(tadpoleport) + ']'
+    pool.append( TagDoc((doc, tadpoleport, i+1)) )
     sys.stdout.flush()
 
 print "RUNNING POOL.."
