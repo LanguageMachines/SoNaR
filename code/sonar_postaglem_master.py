@@ -15,7 +15,7 @@ class TagDoc(AbstractExperiment):
         sonardoc, tadpoleport, count = self.data
         print '#' +str(count) + ')\tPROCESSING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
-
+        sys.stdout.flush()
 
 if len(sys.argv) == 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
     sonardir = sys.argv[1]
@@ -44,6 +44,7 @@ for i, doc in enumerate(CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(
         tadpoleport = 12350
     print '#' + str(i+1) + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
     pool.append( TagDoc((doc.filename, tadpoleport, i+1)) )
+    sys.stdout.flush()
 
 print "RUNNING POOL.."
 
