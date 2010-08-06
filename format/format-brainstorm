@@ -1,14 +1,27 @@
+formats:
+    - SoNaR, all annotations (sonar.xsd)
+    - SoNaR, no annotations (sonar.xsd)
+    - SoNaR, concise (DCOI+extensions)  (sonarmin.xsd)
+    - DCOI (dcoi.xsd)
+
 namespaces:
     - sonar (default): div/text/body/p/s/w/properties/t
+    - xml (id)
+    - imdi
     - modules
-        - dutchsemcor
-        - corrections
+        - dutchsemcor (dsc)
+        - corrections (crc?)
+        - named entity recognition?
+        - semantic roles?
+        - multiword chunker?
+        - dependency parser? 
         
 
 
 
 <s xml:id="WR-P-E-J-0000005889.p.1.s.1">
             <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1">
+            <word>De</word>
             <properties>
              <pos head="LID" resume="LID(bep,neuter,stan,evon)">
               <feature type="gender">neuter</feature>
@@ -36,7 +49,6 @@ namespaces:
              </corrections>
              
             </properties>
-            <t>De</t>
             </w>
              
             <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.2" pos="N(soort,ev,basis,onz,stan)" lemma="kruisgewelf">kruisgewelf</w>

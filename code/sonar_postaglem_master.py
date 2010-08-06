@@ -29,7 +29,7 @@ else:
 
 print "SPAWNING TADPOLES..."
 
-ports = range(12350, 12350+poolsize):
+ports = range(12350, 12350+poolsize)
 if len(ports) >= 7:
     raise Exception("Don't start too many tadpoles!")
 for port in ports:
@@ -45,7 +45,7 @@ for i, doc in enumerate(CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(
     print '#' + str(i+1), + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
     pool.append( TagDoc((doc.filename, tadpoleport, i+1)) )
 
-
+print "RUNNING POOL.."
 
 
 pool.run()
