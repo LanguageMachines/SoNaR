@@ -13,7 +13,7 @@ class TagDoc(AbstractExperiment):
     
     def start(self):
         sonardoc, tadpoleport, count = self.data
-        print '#' +str(count) + ')\tPROCESSING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print '#' +str(count) + ')\tSTARTING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.startcommand('sonar_postaglem_1.py', False,sys.stdout,sys.stderr, sonardoc.filename, tadpoleport)
         sys.stdout.flush()
 
@@ -46,8 +46,9 @@ for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exi
     pool.append( TagDoc((doc, tadpoleport, i+1)) )
     sys.stdout.flush()
 
-print "RUNNING POOL.."
+print "RUNNING POOL..."
+for experiment in pool.run():
+    sonardoc, tadpoleport, count = experiment.inputdata
+    print '#' +str(count) + ')\tDONE\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-
-pool.run()
 
