@@ -29,7 +29,10 @@ else:
 
 print "SPAWNING TADPOLES..."
 
-for port in range(12350, 12350+poolsize):
+ports = range(12350, 12350+poolsize):
+if len(ports) >= 7:
+    raise Exception("Don't start too many tadpoles!")
+for port in ports:
     os.system('Tadpole --skip=tmp -S ' + str(port) + ' &')
 
 print "POPULATING POOL.."
