@@ -40,9 +40,9 @@ print "POPULATING POOL.."
 tadpoleport = 12349
 for i, doc in enumerate(CorpusX(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
     tadpoleport += 1
-    if tadpoleport == 12350 + poolsize: 
+    if tadpoleport == 12350 + poolsize:
         tadpoleport = 12350
-    print '#' + str(i+1), + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
+    print '#' + str(i+1) + ')\tQUEING\t' + doc.filename + ' [' + str(tadpoleport) + ']'
     pool.append( TagDoc((doc.filename, tadpoleport, i+1)) )
 
 print "RUNNING POOL.."
