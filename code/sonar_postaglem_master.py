@@ -27,13 +27,13 @@ else:
 
 #start five tadpoles with tokeniser and MWU *DISABLED*, ports 12350 onward
 
-print "SPAWNING TADPOLES..."
+print "SPAWNING FROGS..."
 
 ports = range(12350, 12350+poolsize)
 if len(ports) >= 7:
-    raise Exception("Don't start too many tadpoles!")
+    raise Exception("Don't start too many frogs!")
 for port in ports:
-    os.system('Tadpole --skip=tmp -S ' + str(port) + ' &')
+    os.system('Frog --skip=tmp -S ' + str(port) + ' &')
 
 print "POPULATING POOL.."
 

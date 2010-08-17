@@ -11,7 +11,7 @@ if len(sys.argv) == 3 and sys.argv[2].isdigit():
     docname = sys.argv[1]
     port = int(sys.argv[2])
 else:
-    print >>sys.stderr,"Usage: ./sonar_postaglem.py [sonar-root-directory]"
+    print >>sys.stderr,"Usage: ./sonar_postaglem.py [sonar-root-directory] [port]"
 
 #Make sure Tadpole/Frog server runs with tokeniser and MWU *DISABLED* !
 tadpoleclient = TadpoleClient('localhost',port) 
