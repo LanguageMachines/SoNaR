@@ -18,6 +18,63 @@ namespaces:
         
 
 
+CONCISE:
+
+<p>
+ <s>
+  <w lemma="de" sense="" pos="LID" morph="" posfeats="bep,neuter,stan,evon">De</w>
+ </s>
+</p>
+
+
+FULL:
+
+<p>
+   <s xml:id="WR-P-E-J-0000005889.p.1.s.1">
+         <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1">
+            <word>De</word>
+            <properties>
+             <pos head="LID" resume="LID(bep,neuter,stan,evon)">
+              <feature type="gender">neuter</feature>
+             </pos>
+             <lemma>het</lemma>
+
+             <morphology>
+                <suffix>blah</suffix>
+                <stem>blah</stem>
+                <infix>blah</infix>
+                <suffix>blah</suffix>
+             </morphology>
+
+             <senses>
+                  <cornettosense c_lu_id="r_n-42846" c_seq_nr="1" c_sy_id="d_n-21132">
+                      <annotator id="MaartenvanGompel" method="manual" confidence="0.9" timestamp="20100423" />
+                      <annotator id="WSD1" method="auto" confidence="0.34" timestamp="20100423" />
+                  </cornettosense>
+             </senses>
+             
+             <corrections original="Het">
+              <correction type="confusable">
+               <annotator id="MaartenvanGompel" method="manual" confidence="0.9" timestamp="20100423" />
+              </correction>
+              <correction type="spelling">
+               <annotator id="MaartenvanGompel" method="manual" confidence="0.9" timestamp="20100423" />
+              </correction>
+             </corrections>
+             
+             <corrections original="Het">
+              <correction type="confusable" />
+              <correction type="spelling" />
+             </corrections>
+             
+            </properties>
+         </w>
+    </s>
+</p>
+
+
+OLD:
+
 
 <s xml:id="WR-P-E-J-0000005889.p.1.s.1">
             <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1">
