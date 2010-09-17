@@ -29,7 +29,9 @@ else:
 
 print "SPAWNING FROGS..."
 
-ports = range(12350, 12350+poolsize)
+BEGINPORT = 12350
+
+ports = range(BEGINPORT, BEGINPORT+poolsize)
 if len(ports) >= 7:
     raise Exception("Don't start too many frogs!")
 for port in ports:
@@ -37,11 +39,11 @@ for port in ports:
 
 print "POPULATING POOL.."
 
-tadpoleport = 12349
+tadpoleport = BEGINPORT - 1
 for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
     tadpoleport += 1
-    if tadpoleport == 12350 + poolsize:
-        tadpoleport = 12350
+    if tadpoleport == BEGINPORT + poolsize:
+        tadpoleport = BEGINPORT
     print '#' + str(i+1) + ')\tQUEING\t' + doc + ' [' + str(tadpoleport) + ']'
     pool.append( TagDoc((doc, tadpoleport, i+1)) )
     sys.stdout.flush()
