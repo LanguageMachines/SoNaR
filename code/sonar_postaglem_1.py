@@ -39,6 +39,9 @@ for sentence in doc.sentences():
                 if lemma:
                     doc[word_id].attrib[ns('dcoi') + 'lemma'] = lemma
 if processed_doc:
-    doc.save(doc.filename+'.pos') #write .tok.pos files
+    try:
+        doc.save(doc.filename+'.pos') #write .tok.pos files
+    except IOError:
+        print >>sys.stderr, "ERROR: UNABLE TO SAVE FILE " + doc.filename+'.pos'
 
 
