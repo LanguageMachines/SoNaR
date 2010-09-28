@@ -17,22 +17,63 @@ namespaces:
         - dependency parser? 
         
 
+goals:
+    - easy parsing
 
-CONCISE:
 
+
+
+<document>
 <p>
  <s>
-  <w lemma="de" sense="" pos="LID" morph="" posfeats="bep,neuter,stan,evon">De</w>
+  <w xml:id="document.p1.s1.w1" word="De" type="word" lemma="de" sense="" poshead="LID" morph="" posmods="bep,neuter,stan,evon" />
  </s>
 </p>
+</document>
+
+
+merges:
+<w xml:id="document.p1.s1.w1-2" word="hetgeen" lemma="hetgeen" correction="merge"><parent xml:id="document.p1.s1.w1" word="het" /><parent xml:id="doc.p1.s1.w2" word="geen" /></w> 
+
+splits:
+<parent ml:id="document.p1.s1.w1" word="eraf" correction="split">
+ <w xml:id="document.p1.s1.w1_1" word="er" />
+ <w xml:id="document.p1.s1.w1_2" word="af" />
+</parent>
+
+
+pos-modifiers:
+<w xml:id="document.p1.s1.w1" word="Het" type="word" lemma="de" sense="" poshead="LID">
+ <pos head="LID" gender="neuter" />
+</w>
+
+morphemes:
+<w xml:id="document.p1.s1.w1" word="gebruiksaanwijzing" type="word" lemma="gebruiksaanwijzing"  poshead="N">
+ <morphemes><m>gebruik</m><m>s</m><m>aan</m><m>wijs</m><m>ing</m></morphemes>
+</w>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------
+
 
 
 FULL:
 
 <p>
    <s xml:id="WR-P-E-J-0000005889.p.1.s.1">
-         <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1">
-            <word>De</word>
+         <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1" word="De">
             <properties>
              <pos head="LID" resume="LID(bep,neuter,stan,evon)">
               <feature type="gender">neuter</feature>
