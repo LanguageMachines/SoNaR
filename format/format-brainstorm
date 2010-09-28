@@ -1,57 +1,90 @@
-formats:
-    - SoNaR, all annotations (sonar.xsd)
-    - SoNaR, no annotations (sonar.xsd)
-    - SoNaR, concise (DCOI+extensions)  (sonarmin.xsd)
-    - DCOI (dcoi.xsd)
-
-namespaces:
-    - sonar (default): div/text/body/p/s/w/properties/t
-    - xml (id)
-    - imdi
-    - modules
-        - dutchsemcor (dsc)
-        - corrections (crc?)
-        - named entity recognition?
-        - semantic roles?
-        - multiword chunker?
-        - dependency parser? 
-        
-
 goals:
-    - easy parsing
+    - to be used by Frog as primary format (maintaining columned format as simplified legacy format only)
+        - reading and writing
+    - possibly to be used by SoNaR?
 
+features:
+    - unique immutable ID for each token
+    - support for merges and splits (with complete inclusion of the old situation and new derived IDs!)
 
+    - extendable with new levels of annotation
+    - easy selection of words ( xpath: //w)
+        - easy selection of words with particular attributes
+            xpath: //w[@poshead='LID']
 
+choices:
+    - pos-modifiers: encode as detailed as possible?
+    - namespace per module?  mbpos:pos   mblem:lemma  
+        (pro: modularity, formal elegance  | con: human legibility, parsing with non-namespace aware parsers)
+
+modules:
+    - mbpos
+    - mblem
+    - mbma
+    - dutchsemcor
+    - mwu
+    - parser 
+    
+    - NER
+    - ticcl?
+    - spelling correction? tanja/martin?
 
 <document>
 <p>
  <s>
-  <w xml:id="document.p1.s1.w1" word="De" type="word" lemma="de" sense="" poshead="LID" morph="" posmods="bep,neuter,stan,evon" />
+  <w xml:id="document.p1.s1.w1" word="De" type="word" lemma="de" sense="" pos="LID(masc)" morph="" posmods="bep,neuter,stan,evon" />
  </s>
 </p>
 </document>
 
 
-merges:
-<w xml:id="document.p1.s1.w1-2" word="hetgeen" lemma="hetgeen" correction="merge"><parent xml:id="document.p1.s1.w1" word="het" /><parent xml:id="doc.p1.s1.w2" word="geen" /></w> 
+== merges ==
+<w xml:id="document.p1.s1.w1-2" word="hetgeen" mblem:lemma="hetgeen" correction="merge"><parent xml:id="document.p1.s1.w1" word="het" /><parent xml:id="doc.p1.s1.w2" word="geen" /></w> 
 
-splits:
-<parent ml:id="document.p1.s1.w1" word="eraf" correction="split">
+== splits ==
+<parent xml:id="document.p1.s1.w1" word="eraf" correction="split">
  <w xml:id="document.p1.s1.w1_1" word="er" />
  <w xml:id="document.p1.s1.w1_2" word="af" />
 </parent>
 
 
-pos-modifiers:
+== pos-modifiers (mbpos) ==
 <w xml:id="document.p1.s1.w1" word="Het" type="word" lemma="de" sense="" poshead="LID">
  <pos head="LID" gender="neuter" />
+ <lemma>de</lemma>
 </w>
 
-morphemes:
+== morphemes (mbma) ==
 <w xml:id="document.p1.s1.w1" word="gebruiksaanwijzing" type="word" lemma="gebruiksaanwijzing"  poshead="N">
  <morphemes><m>gebruik</m><m>s</m><m>aan</m><m>wijs</m><m>ing</m></morphemes>
 </w>
 
+== dependency parser ==
+<w xml:id="document.p1.s1.w1" word="De" parsetype="det" parseparent="document.p1.s1.w2"/>
+<w xml:id="document.p1.s1.w2" word="hond" parsetype="su" parseparent="document.p1.s1.w3"/>
+<w xml:id="document.p1.s1.w3" word="eet" parsetype="ROOT" />
+<w xml:id="document.p1.s1.w4" word="zijn" parsetype="vc" parseparent="document.p1.s1.w3"/>
+<w xml:id="document.p1.s1.w5" word="voer" parsetype="predc" parseparent="document.p1.s1.w3"/>
+<w xml:id="document.p1.s1.w6" word="."  parsetype="punct" parseparent="document.p1.s1.w5"/>
+
+== senses ==
+
+== spelling correction ==
+
+
+
+
+
+<document>
+    <head>
+    </head>
+
+    <foot>
+    </foot>
+</document>
+
+
+div*? (head|foot|p) s parent*? w parent*?
 
 
 
@@ -73,7 +106,10 @@ FULL:
 
 <p>
    <s xml:id="WR-P-E-J-0000005889.p.1.s.1">
-         <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1" word="De">
+         <w xml:id="WR-P-E-J-0000005889.p.1.s.1.w.1">
+            <text>
+            De
+            </text>
             <properties>
              <pos head="LID" resume="LID(bep,neuter,stan,evon)">
               <feature type="gender">neuter</feature>
