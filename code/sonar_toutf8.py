@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+
+from pynlpl.formats.sonar import CorpusX, CorpusDocumentX
+import sys
+import os.path
+
+
+if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]):
+    sonardir = sys.argv[1]
+else:
+    print >>sys.stderr,"Usage: ./sonar_toutf8.py [sonar-root-directory]"
+
+for doc in CorpusX(sonardir,'pos'):
+    doc.save(doc.filename, 'utf-8')
+

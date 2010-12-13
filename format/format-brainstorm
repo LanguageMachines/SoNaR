@@ -17,6 +17,8 @@ choices:
     - namespace per module?  mbpos:pos   mblem:lemma  
         (pro: modularity, formal elegance  | con: human legibility, parsing with non-namespace aware parsers)
 
+- Ticcl correcties zonder tokenisatie
+
 modules:
     - mbpos
     - mblem
@@ -28,6 +30,38 @@ modules:
     - NER
     - ticcl?
     - spelling correction? tanja/martin?
+
+
+
+<?xml version="1.0" encoding="iso-8859-15"?>
+<?xml-stylesheet type="text/xsl" href="sonar2xhtml.xsl"?>
+<document>
+<metadata type="imdi">
+</metadata>
+<header>
+</header>
+<body>
+    <p></p>
+</body>
+<footer>
+</footer>
+</document>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <document>
 <p>
