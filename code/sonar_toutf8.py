@@ -15,5 +15,8 @@ else:
     print >>sys.stderr,"Usage: ./sonar_toutf8.py [sonar-root-directory]"
 
 for doc in CorpusX(sonardir,'pos'):
-    doc.save(doc.filename, 'utf-8')
+    try:
+        doc.save(doc.filename, 'utf-8')
+    except:
+        print "ERROR whilst processing " + doc.filename
 
