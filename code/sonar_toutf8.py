@@ -14,7 +14,8 @@ if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]):
 else:
     print >>sys.stderr,"Usage: ./sonar_toutf8.py [sonar-root-directory]"
 
-for doc in CorpusX(sonardir,'pos'):
+iterator = CorpusX(sonardir,'pos',"",lambda x: True, True) #ignoreerrors=True
+for doc in iterator:
     try:
         doc.save(doc.filename, 'utf-8')
     except:
