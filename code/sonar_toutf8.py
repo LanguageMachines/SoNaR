@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
-
 from pynlpl.formats.sonar import CorpusX, CorpusDocumentX
 import sys
 import os.path
@@ -18,7 +14,7 @@ iterator = CorpusX(sonardir,'pos',"",lambda x: True, True) #ignoreerrors=True
 for doc in iterator:
     try:
         doc.save(doc.filename, 'utf-8')
-	print "     Processed: " + doc.filename
-    except e:
+        print "     Processed: " + doc.filename
+    except Exception, e:
         print "**** ERROR whilst processing " + doc.filename + ": " + str(e)
 
