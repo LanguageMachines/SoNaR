@@ -18,6 +18,7 @@ iterator = CorpusX(sonardir,'pos',"",lambda x: True, True) #ignoreerrors=True
 for doc in iterator:
     try:
         doc.save(doc.filename, 'utf-8')
-    except:
-        print "ERROR whilst processing " + doc.filename
+	print "     Processed: " + doc.filename
+    except e:
+        print "**** ERROR whilst processing " + doc.filename + ": " + str(e)
 
