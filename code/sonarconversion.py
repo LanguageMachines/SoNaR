@@ -74,7 +74,10 @@ def dcoitofolia(filename, content):
     except:
         pass
         
-        
+    doc.declare( folia.AnnotationType.POS, set='http://ilk.uvt.nl/folia/sets/cgn', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
+    doc.declare( folia.AnnotationType.LEMMA, set='http://ilk.uvt.nl/folia/sets/lemmas-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
+    doc.declare( folia.AnnotationType.MORPHEME, set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
+
     return doc
     
 def integritycheck(doc, filename):
@@ -176,7 +179,7 @@ def process(data):
         #Save document
         try:        
             doc.save(foliadir + filename)
-        except Exception as e :
+        except Exception as e:
             errout("\t\tERROR saving " + foliadir + filename + ": " + str(e))
             return None
         
