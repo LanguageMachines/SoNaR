@@ -106,24 +106,24 @@ def integritycheck(doc, filename):
     return success
     
     
-def foliatoplaintext(doc):
+def foliatoplaintext(doc, filename):
     global foliadir
     print "\tConversion to plaintext:"
     try:
-        f = codecs.open(foliadir + doc.filename.replace('.xml','.tok.txt'),'w','utf-8')
+        f = codecs.open(foliadir + filename.replace('.xml','.tok.txt'),'w','utf-8')
         f.write(unicode(doc))    
         f.close()        
     except:
         errout("ERROR saving " + foliadir + doc.filename.replace('.xml','.tok.txt'))
 
-def foliatodcoi(doc):
+def foliatodcoi(doc, filename):
     global dcoidir
     print "\tConversion back to D-Coi XML:"
     try:
         #doc.savedcoi(dcoidir + doc.filename)
         pass
     except:
-        errout(sys.stderr,"ERROR saving " + dcoidir + doc.filename)
+        errout(sys.stderr,"ERROR saving " + dcoidir + filename)
         
     
 
@@ -168,7 +168,7 @@ def process(data):
         doc = dcoitofolia(filename, content)
         
         #FoLiA to plaintext
-        foliatoplaintext(doc)
+        foliatoplaintext(doc, filename)
         
         #Retag
         retag(doc,i)    
