@@ -76,7 +76,7 @@ def dcoitofolia(filename, content):
         
     doc.declare( folia.AnnotationType.POS, set='http://ilk.uvt.nl/folia/sets/cgn', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
     doc.declare( folia.AnnotationType.LEMMA, set='http://ilk.uvt.nl/folia/sets/lemmas-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
-    doc.declare( folia.AnnotationType.MORPHEME, set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
+    doc.declare( folia.AnnotationType.MORPHOLOGICAL , set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
 
     return doc
     
