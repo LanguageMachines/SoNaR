@@ -19,6 +19,7 @@
 
 import sys
 import os
+import traceback
 
 if __name__ == "__main__":
     sys.path.append(sys.path[0] + '/../..')
@@ -190,7 +191,8 @@ def process(data):
         sys.stderr.flush()
     except Exception as e:
         print >> sys.stderr, e
-        raise
+        traceback.print_exc(file=sys.stderr)
+        return False
     return True
     
 def outputexists(filename, sonardir, foliadir):
