@@ -80,7 +80,7 @@ def dcoitofolia(filename, content):
 
     return doc
     
-def integritycheck(doc, filename):
+def integritycheck(doc, filename, contents):
     print "\tIntegrity check:"
     success = True
     r = re.compile('<p.*xml:id="([^"]*)"(.*)>(.*)</p>')
@@ -184,7 +184,7 @@ def process(data):
             return None
         
         #Integrity Check
-        succes = integritycheck(doc, content)
+        succes = integritycheck(doc, filename, content)
         
         #FoLiA to D-Coi
         foliatodcoi(doc, filename)
