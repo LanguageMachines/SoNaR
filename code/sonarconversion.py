@@ -69,7 +69,7 @@ def dcoitofolia(filename, content):
             except:
                 errout("\t\tERROR: Paragraph " + p2.id + " not found. Tokenised and pre-tokenised versions out of sync?")
                 continue
-            p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), folia.TextCorrectionLevel.UNCORRECTED)
+            p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), corrected=folia.TextCorrectionLevel.UNCORRECTED)
     try:
         os.mkdir(foliadir + os.path.dirname(filename))
     except:
