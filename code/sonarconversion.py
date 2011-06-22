@@ -221,6 +221,8 @@ if __name__ == '__main__':
         port = 9000 + i
         os.system("frog --skip=tmp -S " + str(port) + " >/dev/null &")
     
+    time.sleep(3)
+    
     if foliadir[-1] != '/': foliadir += '/'
     try:
         os.mkdir(foliadir[:-1])
