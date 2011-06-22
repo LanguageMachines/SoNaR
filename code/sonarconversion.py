@@ -114,13 +114,13 @@ def foliatoplaintext(doc, filename):
         f.write(unicode(doc))    
         f.close()        
     except:
-        errout("ERROR saving " + foliadir + doc.filename.replace('.xml','.tok.txt'))
+        errout("ERROR saving " + foliadir + filename.replace('.xml','.tok.txt'))
 
 def foliatodcoi(doc, filename):
     global dcoidir
     print "\tConversion back to D-Coi XML:"
     try:
-        #doc.savedcoi(dcoidir + doc.filename)
+        #doc.savedcoi(dcoidir + filename)
         pass
     except:
         errout(sys.stderr,"ERROR saving " + dcoidir + filename)
