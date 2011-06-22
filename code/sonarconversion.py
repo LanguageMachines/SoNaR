@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
-
 #---------------------------------------------------------------
-# PyNLPl - Conversion script for converting SoNaR/D-Coi from D-Coi XML to FoLiA XML
+# PyNLPl - Conversion script for converting SoNaR/D-Coi from D-Coi XML to FoLiA XML, including full retagging
 #   by Maarten van Gompel, ILK, Tilburg University
 #   http://ilk.uvt.nl/~mvgompel
 #   proycon AT anaproy DOT nl
@@ -20,6 +16,7 @@
 import sys
 import os
 import traceback
+import re
 
 if __name__ == "__main__":
     sys.path.append(sys.path[0] + '/../..')
@@ -28,6 +25,7 @@ if __name__ == "__main__":
 from pynlpl.formats import folia
 from pynlpl.formats import sonar
 from pynlpl.formats import cgn
+from pynlpl.clients.frogclient import FrogClient
 from multiprocessing import Pool, Process
 import datetime
 import codecs
