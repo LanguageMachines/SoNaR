@@ -112,20 +112,20 @@ def foliatoplaintext(doc, filename):
     global foliadir
     print "\tConversion to plaintext:"
     try:
-        f = codecs.open(foliadir + os.path.basename(filename).replace('.xml','.tok.txt'),'w','utf-8')
+        f = codecs.open(foliadir + getfilename(filename).replace('.xml','.tok.txt'),'w','utf-8')
         f.write(unicode(doc))    
         f.close()        
     except Exception as e:
-        errout("ERROR saving " + foliadir + os.path.basename(filename).replace('.xml','.tok.txt') + ": " + str(e))
+        errout("ERROR saving " + foliadir + getfilename(filename).replace('.xml','.tok.txt') + ": " + str(e))
 
 def foliatodcoi(doc, filename):
     global dcoidir
     print "\tConversion back to D-Coi XML:"
     try:
-        #doc.savedcoi(dcoidir + filename)
+        #doc.savedcoi(dcoidir + getfilename(filename))
         pass
     except:
-        errout(sys.stderr,"ERROR saving " + dcoidir + os.path.basename(filename))
+        errout(sys.stderr,"ERROR saving " + dcoidir + getfilename(filename))
         
     
 
@@ -178,9 +178,9 @@ def process(data):
         print "\tSaving:"
         #Save document
         try:        
-            doc.save(foliadir + filename)
+            doc.save(foliadir + getfilename(filename))
         except Exception as e:
-            errout("\t\tERROR saving " + foliadir + filename + ": " + str(e))
+            errout("\t\tERROR saving " + foliadir + getfilename(filename) + ": " + str(e))
             return None
         
         #Integrity Check
@@ -196,18 +196,20 @@ def process(data):
         traceback.print_exc(file=sys.stderr)
         return False
     return True
-    
-def outputexists(filename, sonardir, foliadir):
+
+def getfilename(filename):
+    global sonardir
     filename = filename.replace(sonardir,'')
-    if filename[0] == '/':
-        filename = filename[1:]
     if filename[-4:] == '.pos':
         filename = filename[:-4]
     if filename[-4:] == '.tok':
         filename = filename[:-4]    
     if filename[-4:] == '.ilk':
         filename = filename[:-4]     
-    return os.path.exists(foliadir + filename)
+    return filename
+                
+def outputexists(filename, sonardir, foliadir):   
+    return os.path.exists(foliadir + getfilename(filename))
 
 
 if __name__ == '__main__':    
