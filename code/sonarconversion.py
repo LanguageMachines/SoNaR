@@ -119,20 +119,19 @@ def foliatodcoi(doc):
     global dcoidir
     print "\tConversion back to D-Coi XML:"
     try:
-        doc.savedcoi(dcoidir + doc.filename)
+        #doc.savedcoi(dcoidir + doc.filename)
+        pass
     except:
         errout(sys.stderr,"ERROR saving " + dcoidir + doc.filename)
         
-        
-def parse_mbma_tag(frogmorph):
-    r = re.compile('<p.*xml:id="([^"]*)"(.*)>(.*)</p>')
-    origpcount = r.findall(contents)    
     
 
         
 def retag(doc, i):
+    global threads
+    print "\tRetagging:"
     r = re.compile('\[(.*)\]')
-    frogclient = FrogClient('localhost',9001)
+    frogclient = FrogClient('localhost',9000 + (i % threads) )
     
     for sentence in doc.sentences():
         words = " ".join([ w.text() for w in sentence.words() ])
@@ -172,6 +171,7 @@ def process(data):
     #Retag
     retag(doc,i)    
 
+    print "\tSaving:"
     #Save document
     try:        
         doc.save(foliadir + filename)
@@ -208,7 +208,7 @@ if __name__ == '__main__':
     threads = int(sys.argv[3])
     
     #Starting temporary Frog servers
-    for i in range(1,threads+1):
+    for i in range(0,threads):
         port = 9000 + i
         os.system("frog --skip=tmp -S " + str(port) + " &")
     
