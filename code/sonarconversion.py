@@ -138,7 +138,7 @@ def retag(doc, i):
         for j, (word, lemma, morph, pos) in enumerate(frogclient.process(words)):
             wordelement = sentence.words(j)
             wordelement.replace( cgn.parse_cgn_postag(pos) )
-            wordelement.replace( folia.LemmaAnnotation(cls=lemma) )
+            wordelement.replace( folia.LemmaAnnotation, cls=lemma )
             
             #parse mbma
             morphemes = r.findall(morph)
@@ -176,8 +176,8 @@ def process(data):
         #Save document
         try:        
             doc.save(foliadir + filename)
-        except:
-            errout("\t\tERROR saving " + foliadir + filename)
+        except Exception as e :
+            errout("\t\tERROR saving " + foliadir + filename + ": " + str(e))
             return None
         
         #Integrity Check
@@ -216,8 +216,7 @@ if __name__ == '__main__':
     print "Starting Frog server..."
     for i in range(0,threads):
         port = 9000 + i
-        os.system("frog --skip=tmp -S " + str(port) + " &")
-    time.wait(3)
+        os.system("frog --skip=tmp -S " + str(port) + " >/dev/null &")
     
     if foliadir[-1] != '/': foliadir += '/'
     try:
@@ -234,3 +233,4 @@ if __name__ == '__main__':
     p = Pool(threads)
     p.map(process, index )
 
+    print "All done."
