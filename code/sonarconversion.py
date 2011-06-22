@@ -214,7 +214,7 @@ if __name__ == '__main__':
     
     #Starting temporary Frog servers
     print "Starting Frog server..."
-    for i in range(0,threads+1):
+    for i in range(0,threads):
         port = 9000 + i
         os.system("frog --skip=tmp -S " + str(port) + " &")
     time.wait(3)
