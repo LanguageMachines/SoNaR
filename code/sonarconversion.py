@@ -160,7 +160,7 @@ def process(data):
         print >>sys.stderr, s
 
         #Load file (raw)
-        f = codecs.open(filename,'r','utf-8')
+        f = codecs.open(filename,'r','iso-8859-15')
         content = "\n".join(f.readlines())
         f.close()
         
