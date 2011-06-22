@@ -112,11 +112,11 @@ def foliatoplaintext(doc, filename):
     global foliadir
     print "\tConversion to plaintext:"
     try:
-        f = codecs.open(foliadir + filename.replace('.xml','.tok.txt'),'w','utf-8')
+        f = codecs.open(foliadir + os.path.basename(filename).replace('.xml','.tok.txt'),'w','utf-8')
         f.write(unicode(doc))    
         f.close()        
-    except:
-        errout("ERROR saving " + foliadir + filename.replace('.xml','.tok.txt'))
+    except Exception as e:
+        errout("ERROR saving " + foliadir + os.path.basename(filename).replace('.xml','.tok.txt') + ": " + str(e))
 
 def foliatodcoi(doc, filename):
     global dcoidir
@@ -125,7 +125,7 @@ def foliatodcoi(doc, filename):
         #doc.savedcoi(dcoidir + filename)
         pass
     except:
-        errout(sys.stderr,"ERROR saving " + dcoidir + filename)
+        errout(sys.stderr,"ERROR saving " + dcoidir + os.path.basename(filename))
         
     
 
@@ -219,7 +219,9 @@ if __name__ == '__main__':
     print "Starting Frog server..."
     for i in range(0,threads):
         port = 9000 + i
-        os.system("frog --skip=tmp -S " + str(port) + " >/dev/null &")
+        r = os.system("frog --skip=tmp -S " + str(port) + " >/dev/null 2> /dev/null &")
+        if r != 0:
+            errout("Unable to start Frog server!")
     
     time.sleep(3)
     
