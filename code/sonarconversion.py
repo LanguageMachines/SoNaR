@@ -212,9 +212,11 @@ if __name__ == '__main__':
     threads = int(sys.argv[3])
     
     #Starting temporary Frog servers
-    for i in range(0,threads):
+    print "Starting Frog server..."
+    for i in range(0,threads+1):
         port = 9000 + i
         os.system("frog --skip=tmp -S " + str(port) + " &")
+    time.wait(3)
     
     if foliadir[-1] != '/': foliadir += '/'
     try:
