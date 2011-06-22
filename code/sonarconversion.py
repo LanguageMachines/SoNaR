@@ -150,43 +150,47 @@ def retag(doc, i):
 
 def process(data):
     global foliadir, indexlength
-    i, filename = data
-    category = os.path.basename(os.path.dirname(filename))
-    progress = round((i+1) / float(indexlength) * 100,1)    
-    s =  "#" + str(i+1) + " " + filename + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
-    print s
-    print >>sys.stderr, s
+    try:
+        i, filename = data
+        category = os.path.basename(os.path.dirname(filename))
+        progress = round((i+1) / float(indexlength) * 100,1)    
+        s =  "#" + str(i+1) + " " + filename + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
+        print s
+        print >>sys.stderr, s
 
-    #Load file (raw)
-    f = codecs.open(filename,'r','utf-8')
-    content = "\n".join(f.readlines())
-    f.close()
-    
-    #Convert to FoLiA
-    doc = dcoitofolia(filename, content)
-    
-    #FoLiA to plaintext
-    foliatoplaintext(doc)
-    
-    #Retag
-    retag(doc,i)    
+        #Load file (raw)
+        f = codecs.open(filename,'r','utf-8')
+        content = "\n".join(f.readlines())
+        f.close()
+        
+        #Convert to FoLiA
+        doc = dcoitofolia(filename, content)
+        
+        #FoLiA to plaintext
+        foliatoplaintext(doc)
+        
+        #Retag
+        retag(doc,i)    
 
-    print "\tSaving:"
-    #Save document
-    try:        
-        doc.save(foliadir + filename)
-    except:
-        errout("\t\tERROR saving " + foliadir + filename)
-        return None
-    
-    #Integrity Check
-    succes = integritycheck(doc, content)
-    
-    #FoLiA to D-Coi
-    foliatodcoi(doc, filename)
-            
-    sys.stdout.flush()
-    sys.stderr.flush()
+        print "\tSaving:"
+        #Save document
+        try:        
+            doc.save(foliadir + filename)
+        except:
+            errout("\t\tERROR saving " + foliadir + filename)
+            return None
+        
+        #Integrity Check
+        succes = integritycheck(doc, content)
+        
+        #FoLiA to D-Coi
+        foliatodcoi(doc, filename)
+                
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except Exception as e:
+        print >> sys.stderr, e
+        raise
     return True
     
 def outputexists(filename, sonardir, foliadir):
@@ -222,6 +226,7 @@ if __name__ == '__main__':
     index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'tok', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
     indexlength = len(index)
 
+    
     print "Processing..."
     p = Pool(threads)
     p.map(process, index )
