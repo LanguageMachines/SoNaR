@@ -30,6 +30,8 @@ from pynlpl.clients.frogclient import FrogClient
 from multiprocessing import Pool, Process
 import datetime
 import codecs
+import lxml.etree
+from StringIO import StringIO
 
 
 def errout(error):
@@ -41,15 +43,19 @@ def dcoitofolia(filename, parseddcoi):
     print "\tConversion to FoLiA:"    
 
     try:
-        parsedfolia = dcoitofoliatransformer.transform(parseddcoi)
+        parsedfolia = dcoitofoliatransformer(parseddcoi)
     except Exception as e:
         errout("\t\tERROR transforming D-Coi document to FoLiA: " + filename + ":" + str(e))
-    
+        return None, None
+        
     try:
         foliadoc = folia.Document(tree=parsedfolia)
     except Exception as e:
         errout("\t\tERROR loading FoLiA document after conversion from D-Coi: " + filename + ":" + str(e))
-
+        return None, None
+        
+        
+    print "\t\tConverted"   
     
     #find filename base, strip extensions and path (only .xml stays)
     filename = getfilename(filename)
@@ -69,7 +75,7 @@ def dcoitofolia(filename, parseddcoi):
             try:
                 p = foliadoc[p2.id]        
             except:
-                errout("\t\tERROR: Paragraph " + p2.id + " not found. Tokenised and pre-tokenised versions out of sync?")
+                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync?")
                 continue
             p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), corrected=folia.TextCorrectionLevel.UNCORRECTED)
     try:
@@ -77,37 +83,46 @@ def dcoitofolia(filename, parseddcoi):
     except:
         pass
         
-    doc.declare( folia.AnnotationType.POS, set='http://ilk.uvt.nl/folia/sets/cgn', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
-    doc.declare( folia.AnnotationType.LEMMA, set='http://ilk.uvt.nl/folia/sets/lemmas-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
-    #doc.declare( folia.AnnotationType.MORPHOLOGICAL , set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
-
+        
+    #Fix Gap problem (widely spread invalid D-Coi XML in SoNaR)       
+    for text in foliadoc:
+        for gap in text.select(folia.Gap):
+            if gap.annotator and not gap.content():                
+                print "\t\tCorrecting malformed gap"
+                gap.replace(folia.Content, value=gap.annotator)
+                gap.annotator = None                
+    
+    print "\t\tDone"    
     return foliadoc, parsedfolia
     
 def integritycheck(doc, filename, contents):
     print "\tIntegrity check:"
     success = True
-    r = re.compile('<p.*xml:id="([^"]*)"(.*)>(.*)</p>')
-    origpcount = r.findall(contents)
-    r = re.compile('<s.*xml:id="([^"]*)"(.*)>(.*)</s>')
-    origscount = r.findall(contents)
+    r = re.compile('<p.*xml:id="([^"]*)"(.*)>')
+    origpcount = len(r.findall(contents))
+    r = re.compile('<s.*xml:id="([^"]*)"(.*)>')
+    origscount = len(r.findall(contents))
     r = re.compile('<w.*xml:id="([^"]*)"(.*)>(.*)</w>')
-    origwcount = r.findall(contents)
+    origwcount = len(r.findall(contents))
 
     pcount = len(doc.paragraphs())
     scount = len(doc.sentences())
     wcount = len(doc.words())
     print "\t\tParagraphs:\t" + str(pcount)
     if pcount != origpcount:
-        errout("ERROR: INTEGRITY CHECK FAILED ON PARAGRAPH COUNT (" + str(origpcount)+"): " + filename)
+        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON PARAGRAPH COUNT (" + str(origpcount)+"!=" + str(pcount)+"): " + filename)
         success = False
     print "\t\tSentences:\t" + str(scount)
     if scount != origscount:
-        errout("ERROR: INTEGRITY CHECK FAILED ON SENTENCE COUNT (" + str(origscount)+"): " + filename)
+        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON SENTENCE COUNT (" + str(origscount)+"!=" + str(scount)+"): " + filename)
         success = False
     print "\t\tWords:\t" + str(wcount)
     if wcount != origwcount:
-        errout("ERROR: INTEGRITY CHECK FAILED ON WORD COUNT (" + str(origwcount)+"): " + filename)
+        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON WORD COUNT (" + str(origwcount)+"!=" + str(wcount)+"): " + filename)
         success = False
+    
+    if success:
+        print "\t\tSuccess"            
     return success
     
     
@@ -118,8 +133,9 @@ def foliatoplaintext(doc, filename):
         f = codecs.open(foliadir + getfilename(filename).replace('.xml','.tok.txt'),'w','utf-8')
         f.write(unicode(doc))    
         f.close()        
+        print "\t\tDone"    
     except Exception as e:
-        errout("ERROR saving " + foliadir + getfilename(filename).replace('.xml','.tok.txt') + ": " + str(e))
+        errout("\t\tERROR saving " + foliadir + getfilename(filename).replace('.xml','.tok.txt') + ": " + str(e))
 
 def foliatodcoi(doc, filename):
     global dcoidir
@@ -158,25 +174,27 @@ def process(data):
     global foliadir, indexlength
     try:
         i, filepath = data
-        category = os.path.basename(os.path.dirname(filename))
+        category = os.path.basename(os.path.dirname(filepath))
         progress = round((i+1) / float(indexlength) * 100,1)    
-        s =  "#" + str(i+1) + " " + filename + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
+        s =  "#" + str(i+1) + " " + filepath + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
         print s
         print >>sys.stderr, s
 
         #Load file (raw)
-        f = codecs.open(filename,'r','iso-8859-15')
+        f = codecs.open(filepath,'r','iso-8859-15')
         content = "\n".join(f.readlines())
         f.close()
         
         try:
-            parsedcoi = etree.parse(content)
+            parseddcoi = lxml.etree.parse(StringIO(content.encode('iso-8859-15')))
         except Exception, e:
-            errout("\t\tERROR: D-COI DOCUMENT " + filepath + " IS MALFORMED XML! ",  str(e))
+            errout("\t\tERROR: D-COI DOCUMENT " + filepath + " IS MALFORMED XML! " +  str(e))
             return False
             
         #Convert to FoLiA
         foliadoc, parsedfolia = dcoitofolia(filepath, parseddcoi)
+        if not foliadoc:
+            return False
         
         #FoLiA to plaintext
         foliatoplaintext(foliadoc, filepath)
@@ -184,17 +202,17 @@ def process(data):
         print "\tSaving:"
         #Save document
         try:        
-            doc.save(foliadir + getfilename(filepath))
+            foliadoc.save(foliadir + getfilename(filepath))
         except Exception as e:
             errout("\t\tERROR saving " + foliadir + getfilename(filepath) + ": " + str(e))
             return False
         
         #Integrity Check
-        succes = integritycheck(doc, filepath, content)
+        succes = integritycheck(foliadoc, filepath, content)
         
         #FoLiA to D-Coi
-        foliatodcoi(doc, filename)
-                
+        #foliatodcoi(foliadoc, filepath)
+            
         sys.stdout.flush()
         sys.stderr.flush()
     except Exception as e:
@@ -220,17 +238,21 @@ def outputexists(filename, sonardir, foliadir):
 
 
 if __name__ == '__main__':    
-    sonardir = sys.argv[1]
-    foliadir = sys.argv[2]
-    xsltfile = etree.XSLT(etree.parse(sys.argv[3]))
-    threads = int(sys.argv[4])
+    try:
+        sonardir = sys.argv[1]
+        foliadir = sys.argv[2]
+        xsltfile = sys.argv[3]
+        threads = int(sys.argv[4])
+    except:
+        print >>sys.stderr,"Syntax: sonarconversion.py sonardir foliadir dcoi2folia.xsl threads"
+        sys.exit(2)
     
     #Let XSLT do the basic conversion to HTML
-    xslt = etree.parse(xsltfile)
-    dcoitofoliatransformer = etree.XSLT(xslt)
+    xslt = lxml.etree.parse(xsltfile)
+    dcoitofoliatransformer = lxml.etree.XSLT(xslt)
     #html = transform(xmldoc)    
     
-    schema = ElementTree.RelaxNG(folia.relaxng())
+    schema = lxml.etree.RelaxNG(folia.relaxng())
     #schema.assertValid(doc)
     
     time.sleep(3)
