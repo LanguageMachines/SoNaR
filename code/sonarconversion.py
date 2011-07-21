@@ -31,40 +31,43 @@ from multiprocessing import Pool, Process
 import datetime
 import codecs
 
+
 def errout(error):
     print error
     print >>sys.stderr, error
 
-def dcoitofolia(filename, content):
-    global foliadir
-    print "\tConversion to FoLiA:"
+def dcoitofolia(filename, parseddcoi):        
+    global foliadir, dcoitofoliatransformer
+    print "\tConversion to FoLiA:"    
+
     try:
-        doc = folia.Document(string=content)
+        parsedfolia = dcoitofoliatransformer.transform(parseddcoi)
     except Exception as e:
-        print >> sys.stderr,"\t\tERROR loading " + filename + ":" + str(e)
-        return False
-    filename = filename.replace(sonardir,'')
-    if filename[0] == '/':
-        filename = filename[1:]
-    if filename[-4:] == '.pos':
-        filename = filename[:-4]
-    if filename[-4:] == '.tok':
-        filename = filename[:-4]    
-    if filename[-4:] == '.ilk':
-        filename = filename[:-4]    
+        errout("\t\tERROR transforming D-Coi document to FoLiA: " + filename + ":" + str(e))
+    
+    try:
+        foliadoc = folia.Document(tree=parsedfolia)
+    except Exception as e:
+        errout("\t\tERROR loading FoLiA document after conversion from D-Coi: " + filename + ":" + str(e))
+
+    
+    #find filename base, strip extensions and path (only .xml stays)
+    filename = getfilename(filename)
+        
+        
     #Load document prior to tokenisation
     try:
         pretokdoc = folia.Document(file=sonardir + '/' + filename)
-        print "\t\tPre-tokenised version included: yes"
+        errout("\t\tPre-tokenised version included: yes")
     except:        
         errout("\t\tWARNING: Unable to load pretokdoc " + filename)
-        print "\t\tPre-tokenised version included: no"
+        errout("\t\tPre-tokenised version included: no")
         pretokdoc = None
         
     if pretokdoc:
         for p2 in pretokdoc.paragraphs():
             try:
-                p = doc[p2.id]        
+                p = foliadoc[p2.id]        
             except:
                 errout("\t\tERROR: Paragraph " + p2.id + " not found. Tokenised and pre-tokenised versions out of sync?")
                 continue
@@ -76,9 +79,9 @@ def dcoitofolia(filename, content):
         
     doc.declare( folia.AnnotationType.POS, set='http://ilk.uvt.nl/folia/sets/cgn', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
     doc.declare( folia.AnnotationType.LEMMA, set='http://ilk.uvt.nl/folia/sets/lemmas-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
-    doc.declare( folia.AnnotationType.MORPHOLOGICAL , set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
+    #doc.declare( folia.AnnotationType.MORPHOLOGICAL , set='http://ilk.uvt.nl/folia/sets/mbma-nl', annotator='frog', annotatortype=folia.AnnotatorType.AUTO)
 
-    return doc
+    return foliadoc, parsedfolia
     
 def integritycheck(doc, filename, contents):
     print "\tIntegrity check:"
@@ -154,7 +157,7 @@ def retag(doc, i):
 def process(data):
     global foliadir, indexlength
     try:
-        i, filename = data
+        i, filepath = data
         category = os.path.basename(os.path.dirname(filename))
         progress = round((i+1) / float(indexlength) * 100,1)    
         s =  "#" + str(i+1) + " " + filename + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
@@ -166,25 +169,28 @@ def process(data):
         content = "\n".join(f.readlines())
         f.close()
         
+        try:
+            parsedcoi = etree.parse(content)
+        except Exception, e:
+            errout("\t\tERROR: D-COI DOCUMENT " + filepath + " IS MALFORMED XML! ",  str(e))
+            return False
+            
         #Convert to FoLiA
-        doc = dcoitofolia(filename, content)
+        foliadoc, parsedfolia = dcoitofolia(filepath, parseddcoi)
         
         #FoLiA to plaintext
-        foliatoplaintext(doc, filename)
-        
-        #Retag
-        retag(doc,i)    
+        foliatoplaintext(foliadoc, filepath)
 
         print "\tSaving:"
         #Save document
         try:        
-            doc.save(foliadir + getfilename(filename))
+            doc.save(foliadir + getfilename(filepath))
         except Exception as e:
-            errout("\t\tERROR saving " + foliadir + getfilename(filename) + ": " + str(e))
-            return None
+            errout("\t\tERROR saving " + foliadir + getfilename(filepath) + ": " + str(e))
+            return False
         
         #Integrity Check
-        succes = integritycheck(doc, filename, content)
+        succes = integritycheck(doc, filepath, content)
         
         #FoLiA to D-Coi
         foliatodcoi(doc, filename)
@@ -198,6 +204,7 @@ def process(data):
     return True
 
 def getfilename(filename):
+    #find filename base, strip extensions and path (only .xml stays)
     global sonardir
     filename = filename.replace(sonardir,'')
     if filename[-4:] == '.pos':
@@ -215,15 +222,16 @@ def outputexists(filename, sonardir, foliadir):
 if __name__ == '__main__':    
     sonardir = sys.argv[1]
     foliadir = sys.argv[2]
-    threads = int(sys.argv[3])
+    xsltfile = etree.XSLT(etree.parse(sys.argv[3]))
+    threads = int(sys.argv[4])
     
-    #Starting temporary Frog servers
-    print "Starting Frog server..."
-    for i in range(0,threads):
-        port = 9000 + i
-        r = os.system("frog --skip=tmp -S " + str(port) + " >/dev/null 2> /dev/null &")
-        if r != 0:
-            errout("Unable to start Frog server!")
+    #Let XSLT do the basic conversion to HTML
+    xslt = etree.parse(xsltfile)
+    dcoitofoliatransformer = etree.XSLT(xslt)
+    #html = transform(xmldoc)    
+    
+    schema = ElementTree.RelaxNG(folia.relaxng())
+    #schema.assertValid(doc)
     
     time.sleep(3)
     
