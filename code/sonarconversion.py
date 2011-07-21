@@ -107,30 +107,34 @@ class dcoi:
     Gap =  re.compile('<gap[^>]*>')
 
 
-xmlextract = re.compile('<([A-Za-z0-9:]+)[^>]*>')
 
-def integritycheck(doc, filename, contents, parseddcoi):    
-    global xmlextract
-    print "\tStructural integrity check:"
+xmlextract = re.compile('<([A-Za-z0-9:]+)[^>]*>')
+checkelements = [
+    ('w', folia.Word),
+    ('s', folia.Sentence),
+    ('p', folia.Paragraph), 
+    ('div', folia.Division), 
+    ('div0', folia.Division), 
+    ('div1', folia.Division), 
+    ('div2', folia.Division), 
+    ('div3', folia.Division), 
+    ('div4', folia.Division), 
+    ('div5', folia.Division), 
+    ('div6', folia.Division), 
+    ('div7', folia.Division), 
+    ('div8', folia.Division), 
+    ('div9', folia.Division), 
+    ('head', folia.Head), 
+    ('figure', folia.Figure), 
+    ('list', folia.List), 
+    ('item', folia.ListItem), 
+    ('gap', folia.Gap),         
+]  
     
-    checkelements = [
-        ('w', folia.Word),
-        ('s', folia.Sentence),
-        ('p', folia.Paragraph), 
-        ('div', folia.Division), 
-        ('div0', folia.Division), 
-        ('div1', folia.Division), 
-        ('div2', folia.Division), 
-        ('div3', folia.Division), 
-        ('div4', folia.Division), 
-        ('div5', folia.Division), 
-        ('div6', folia.Division), 
-        ('div7', folia.Division), 
-        ('div8', folia.Division), 
-        ('div9', folia.Division), 
-        ('head', folia.Head), 
-        ('gap', folia.Gap),         
-    ]    
+def integritycheck(doc, filename, contents, parseddcoi):    
+    global xmlextract, checkelements
+    print "\tStructural integrity check:"
+
     dcoitags = [ tag for tag in xmlextract.findall(contents) if tag in [ x[0] for x in checkelements ] ]
     foliaitems = [ item for item in [ x.__class__ for x in doc.items() ] if item in [ x[1] for x in checkelements ] ]
     
@@ -148,6 +152,7 @@ def integritycheck(doc, filename, contents, parseddcoi):
             if not ((dcoitag, foliaitem) in checkelements):
                 errout("\t\t\tERROR: STRUCTURAL INTEGRITY CHECK FAILED ON ITEM " + str(i) + " OF " + len(dcoitags) + ": " + dcoitag + " != " + str(foliaitem))
                 success = False        
+                break
     if success:
         print "\t\tSuccess"            
     return success
@@ -300,7 +305,7 @@ if __name__ == '__main__':
         pass
             
     print "Building index..."
-    index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'tok', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
+    index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'pos', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
     indexlength = len(index)
 
     
