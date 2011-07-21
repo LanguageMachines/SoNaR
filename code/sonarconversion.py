@@ -97,32 +97,57 @@ def dcoitofolia(filename, parseddcoi):
     print "\t\tDone"    
     return foliadoc
     
-def integritycheck(doc, filename, contents):
-    print "\tIntegrity check:"
-    success = True
-    r = re.compile('<p.*xml:id="([^"]*)"(.*)>')
-    origpcount = len(r.findall(contents))
-    r = re.compile('<s.*xml:id="([^"]*)"(.*)>')
-    origscount = len(r.findall(contents))
-    r = re.compile('<w.*xml:id="([^"]*)"(.*)>(.*)</w>')
-    origwcount = len(r.findall(contents))
-
-    pcount = len(doc.paragraphs())
-    scount = len(doc.sentences())
-    wcount = len(doc.words())
-    print "\t\tParagraphs:\t" + str(pcount)
-    if pcount != origpcount:
-        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON PARAGRAPH COUNT (" + str(origpcount)+"!=" + str(pcount)+"): " + filename)
-        success = False
-    print "\t\tSentences:\t" + str(scount)
-    if scount != origscount:
-        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON SENTENCE COUNT (" + str(origscount)+"!=" + str(scount)+"): " + filename)
-        success = False
-    print "\t\tWords:\t" + str(wcount)
-    if wcount != origwcount:
-        errout("\t\t\tERROR: INTEGRITY CHECK FAILED ON WORD COUNT (" + str(origwcount)+"!=" + str(wcount)+"): " + filename)
-        success = False
     
+class dcoi:    
+    Word = re.compile('<w[^>]*>')
+    Sentence = re.compile('<s[^>]*>')
+    Paragraph = re.compile('<p[^>]*>')
+    Division =  re.compile('<div[0-9]?[^>]*>')
+    Head =  re.compile('<head[^>]*>')
+    Gap =  re.compile('<gap[^>]*>')
+
+
+xmlextract = re.compile('<([A-Za-z0-9:]+)[^>]*>')
+
+def integritycheck(doc, filename, contents, parseddcoi):    
+    global xmlextract
+    print "\tStructural integrity check:"
+    
+    checkelements = [
+        ('w', folia.Word),
+        ('s', folia.Sentence),
+        ('p', folia.Paragraph), 
+        ('div', folia.Division), 
+        ('div0', folia.Division), 
+        ('div1', folia.Division), 
+        ('div2', folia.Division), 
+        ('div3', folia.Division), 
+        ('div4', folia.Division), 
+        ('div5', folia.Division), 
+        ('div6', folia.Division), 
+        ('div7', folia.Division), 
+        ('div8', folia.Division), 
+        ('div9', folia.Division), 
+        ('head', folia.Head), 
+        ('gap', folia.Gap),         
+    ]    
+    dcoitags = [ tag for tag in xmlextract.findall(contents) if tag in [ x[0] for x in checkelements ] ]
+    foliaitems = [ item for item in [ x.__class__ for x in doc.items() ] if item in [ x[1] for x in checkelements ] ]
+    
+    if len(dcoitags) == 0:
+        errout("\t\t\tWARNING: DCOI DOCUMENT HAS NO SENSIBLE ELEMENTS!")
+    elif len(foliaitems) == 0:
+        errout("\t\t\tWARNING: FOLIA DOCUMENT HAS NO SENSIBLE ELEMENTS!")
+    
+    success = True
+    if len(dcoitags) != len(foliaitems):
+        errout("\t\t\tERROR: STRUCTURAL INTEGRITY CHECK FAILED, DCOI HAS " + str(len(dcoitags)) + " checkable items, FoLiA has " + str(len(foliaitems)))
+        success = False    
+    else:
+        for i, (dcoitag, foliaitem) in enumerate(zip(dcoitags, foliaitems)):
+            if not ((dcoitag, foliaitem) in checkelements):
+                errout("\t\t\tERROR: STRUCTURAL INTEGRITY CHECK FAILED ON ITEM " + str(i) + " OF " + len(dcoitags) + ": " + dcoitag + " != " + str(foliaitem))
+                success = False        
     if success:
         print "\t\tSuccess"            
     return success
@@ -218,7 +243,7 @@ def process(data):
             return False
         
         #Integrity Check
-        succes = integritycheck(foliadoc, filepath, content)
+        succes = integritycheck(foliadoc, filepath, content, parseddcoi)
         
         validate(foliadir + getfilename(filepath))
         
