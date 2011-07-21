@@ -187,6 +187,18 @@ def validate(filepath):
         print "\t\tSuccess"       
     except Exception,e :
         errout("\t\tERROR: DOCUMENT DOES NOT VALIDATE! ("  +filepath + "): " + str(e))
+
+
+def splittags(doc):
+    print "\tResolving PoS tags:"
+    for word in doc.words():
+        if word.hasannotation(folia.PosAnnotation):
+            word.replace( cgn.parse_cgn_postag(word.pos()) )
+        else:
+            errout("\t\tWARNING: No PoS tag for " + word.id )
+        if not word.hasannotation(folia.LemmaAnnotation):
+            errout("\t\tWARNING: No Lemma for " + word.id )
+    return doc
         
 def retag(doc, i):
     global threads
@@ -234,6 +246,9 @@ def process(data):
         foliadoc = dcoitofolia(filepath, parseddcoi)
         if not foliadoc:
             return False
+        
+        #Split CGN tags
+        splittags(foliadoc)
         
         #FoLiA to plaintext
         foliatoplaintext(foliadoc, filepath)
