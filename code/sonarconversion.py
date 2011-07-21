@@ -46,13 +46,13 @@ def dcoitofolia(filename, parseddcoi):
         parsedfolia = dcoitofoliatransformer(parseddcoi)
     except Exception as e:
         errout("\t\tERROR transforming D-Coi document to FoLiA: " + filename + ":" + str(e))
-        return None, None
-        
+        return None
+
     try:
         foliadoc = folia.Document(tree=parsedfolia)
     except Exception as e:
         errout("\t\tERROR loading FoLiA document after conversion from D-Coi: " + filename + ":" + str(e))
-        return None, None
+        return None
         
         
     print "\t\tConverted"   
@@ -89,11 +89,13 @@ def dcoitofolia(filename, parseddcoi):
         for gap in text.select(folia.Gap):
             if gap.annotator and not gap.content():                
                 print "\t\tCorrecting malformed gap"
-                gap.replace(folia.Content, value=gap.annotator)
+                content = gap.annotator
+                content = content.replace('\\n','\n')
+                gap.replace(folia.Content, value=content)
                 gap.annotator = None                
     
     print "\t\tDone"    
-    return foliadoc, parsedfolia
+    return foliadoc
     
 def integritycheck(doc, filename, contents):
     print "\tIntegrity check:"
@@ -144,10 +146,17 @@ def foliatodcoi(doc, filename):
         #doc.savedcoi(dcoidir + getfilename(filename))
         pass
     except:
-        errout(sys.stderr,"ERROR saving " + dcoidir + getfilename(filename))
+        errout("ERROR saving " + dcoidir + getfilename(filename))
         
     
-
+def validate(filepath):
+    global schema
+    print "\tValidating"
+    try:
+        folia.validate(filepath, schema)
+        print "\t\tSuccess"       
+    except Exception,e :
+        errout("\t\tERROR: DOCUMENT DOES NOT VALIDATE! ("  +filepath + "): " + str(e))
         
 def retag(doc, i):
     global threads
@@ -192,7 +201,7 @@ def process(data):
             return False
             
         #Convert to FoLiA
-        foliadoc, parsedfolia = dcoitofolia(filepath, parseddcoi)
+        foliadoc = dcoitofolia(filepath, parseddcoi)
         if not foliadoc:
             return False
         
@@ -203,12 +212,15 @@ def process(data):
         #Save document
         try:        
             foliadoc.save(foliadir + getfilename(filepath))
+            print "\t\t" + foliadir + getfilename(filepath)
         except Exception as e:
             errout("\t\tERROR saving " + foliadir + getfilename(filepath) + ": " + str(e))
             return False
         
         #Integrity Check
         succes = integritycheck(foliadoc, filepath, content)
+        
+        validate(foliadir + getfilename(filepath))
         
         #FoLiA to D-Coi
         #foliatodcoi(foliadoc, filepath)
@@ -255,7 +267,6 @@ if __name__ == '__main__':
     schema = lxml.etree.RelaxNG(folia.relaxng())
     #schema.assertValid(doc)
     
-    time.sleep(3)
     
     if foliadir[-1] != '/': foliadir += '/'
     try:
