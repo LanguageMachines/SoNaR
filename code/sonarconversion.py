@@ -64,10 +64,10 @@ def dcoitofolia(filename, parseddcoi):
     #Load document prior to tokenisation
     try:
         pretokdoc = folia.Document(file=sonardir + '/' + filename)
-        errout("\t\tPre-tokenised version included: yes")
-    except:        
-        errout("\t\tWARNING: Unable to load pretokdoc " + filename)
-        errout("\t\tPre-tokenised version included: no")
+        print "\t\tPre-tokenised version included: yes"
+    except Exception, e:        
+        errout("\t\tWARNING: Unable to load pretokdoc " + filename + ": " + str(e))
+        print "\t\tPre-tokenised version included: no"
         pretokdoc = None
         
     if pretokdoc:
@@ -75,7 +75,7 @@ def dcoitofolia(filename, parseddcoi):
             try:
                 p = foliadoc[p2.id]        
             except:
-                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync?")
+                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync!")
                 continue
             p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), corrected=folia.TextCorrectionLevel.UNCORRECTED)
     try:
