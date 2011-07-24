@@ -75,7 +75,7 @@ def dcoitofolia(filename, parseddcoi):
             try:
                 p = foliadoc[p2.id]        
             except:
-                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync!")
+                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync! (" + len(p2.text(folia.TextCorrectionLevel.UNCORRECTED)) + ")")
                 continue
             p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), corrected=folia.TextCorrectionLevel.UNCORRECTED)
     try:
