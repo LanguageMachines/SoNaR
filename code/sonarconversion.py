@@ -75,9 +75,15 @@ def dcoitofolia(filename, parseddcoi):
             try:
                 p = foliadoc[p2.id]        
             except:
-                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync! (" + str(len(p2.text(folia.TextCorrectionLevel.UNCORRECTED))) + ")")
+                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync! (" + str(len(p2.text('original'))) + ")")
                 continue
-            p.append(p2.text(folia.TextCorrectionLevel.UNCORRECTED), corrected=folia.TextCorrectionLevel.UNCORRECTED)
+            #check if there is any Correction/New element below this level
+            l = p.select(folia.New, None,True,[])
+            if len(l) > 0:
+                cls = 'original'
+            else:
+                cls = 'current'
+            p.append(p2.text(), cls=cls)
     try:
         os.mkdir(foliadir + os.path.dirname(filename))
     except:
@@ -251,7 +257,7 @@ def process(data):
         splittags(foliadoc)
         
         #FoLiA to plaintext
-        foliatoplaintext(foliadoc, filepath)
+        #foliatoplaintext(foliadoc, filepath)
 
         print "\tSaving:"
         #Save document
