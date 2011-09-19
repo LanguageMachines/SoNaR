@@ -62,12 +62,16 @@ def dcoitofolia(filename, parseddcoi):
         
         
     #Load document prior to tokenisation
-    try:
-        pretokdoc = folia.Document(file=sonardir + '/' + filename)
-        print "\t\tPre-tokenised version included: yes"
-    except Exception, e:        
-        errout("\t\tWARNING: Unable to load pretokdoc " + filename + ": " + str(e))
-        print "\t\tPre-tokenised version included: no"
+    if os.path.exists(sonardir + '/' + filename): 
+        try:
+            pretokdoc = folia.Document(file=sonardir + '/' + filename)
+            print "\t\tPre-tokenised version included: yes"
+        except Exception, e:        
+            errout("\t\tERROR: Unable to load pretokdoc " + filename + ": " + str(e))
+            print "\t\tPre-tokenised version included: no"
+            pretokdoc = None
+    else:
+        print "\t\tPre-tokenised version included: NO! " + sonardir + '/' + filename + " does not exist..."
         pretokdoc = None
         
     if pretokdoc:
@@ -328,6 +332,7 @@ if __name__ == '__main__':
     print "Building index..."
     index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'pos', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
     indexlength = len(index)
+    print str(indexlength) + " documents found in " + sonardir
 
     
     print "Processing..."
