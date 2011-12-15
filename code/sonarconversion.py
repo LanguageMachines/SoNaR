@@ -57,37 +57,42 @@ def dcoitofolia(filename, parseddcoi):
         
     print "\t\tConverted"   
     
-    #find filename base, strip extensions and path (only .xml stays)
+    
+    
+    #find filename base, strip extensions and path
     filename = getfilename(filename)
+    
         
         
     #Load document prior to tokenisation
-    if os.path.exists(sonardir + '/' + filename): 
-        try:
-            pretokdoc = folia.Document(file=sonardir + '/' + filename)
-            print "\t\tPre-tokenised version included: yes"
-        except Exception, e:        
-            errout("\t\tERROR: Unable to load pretokdoc " + filename + ": " + str(e))
-            print "\t\tPre-tokenised version included: no"
-            pretokdoc = None
-    else:
-        print "\t\tPre-tokenised version included: NO! " + sonardir + '/' + filename + " does not exist..."
-        pretokdoc = None
-        
-    if pretokdoc:
-        for p2 in pretokdoc.paragraphs():
-            try:
-                p = foliadoc[p2.id]        
-            except:
-                errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync! (" + str(len(p2.text('original'))) + ")")
-                continue
-            #check if there is any Correction/New element below this level
-            l = p.select(folia.New, None,True,[])
-            if len(l) > 0:
-                cls = 'original'
-            else:
-                cls = 'current'
-            p.append(p2.text(), cls=cls)
+    #if os.path.exists(sonardir + '/' + filename): 
+    #    try:
+    #        pretokdoc = folia.Document(file=sonardir + '/' + filename)
+    #        print "\t\tPre-tokenised version included: yes"
+    #    except Exception, e:        
+    #        errout("\t\tERROR: Unable to load pretokdoc " + filename + ": " + str(e))
+    #        print "\t\tPre-tokenised version included: no"
+    #        pretokdoc = None
+    #else:
+    #    print "\t\tPre-tokenised version included: NO! " + sonardir + '/' + filename + " does not exist..."
+    #    pretokdoc = None
+    #    
+    #if pretokdoc:
+    #    for p2 in pretokdoc.paragraphs():
+    #        try:
+    #            p = foliadoc[p2.id]        
+    #        except:
+    #            errout("\t\tERROR: Paragraph " + p2.id + " not found in converted document. Tokenised and pre-tokenised versions out of sync! (" + str(len(p2.text('original'))) + ")")
+    #            continue
+    #        #check if there is any Correction/New element below this level
+    #        l = p.select(folia.New, None,True,[])
+    #        if len(l) > 0:
+    #            cls = 'original'
+    #        else:
+    #            cls = 'current'
+    #        p.append(p2.text(), cls=cls)
+    
+    
     try:
         os.mkdir(foliadir + os.path.dirname(filename))
     except:
@@ -103,6 +108,16 @@ def dcoitofolia(filename, parseddcoi):
                 content = content.replace('\\n','\n')
                 gap.replace(folia.Content, value=content)
                 gap.annotator = None                
+                
+    #strip IMDI data and add reference to external file
+    if foliadoc.metadatatype == folia.MetaDataType.IMDI:
+        print "\t\tRemoving IMDI metadata"
+        foliadoc.metadata = {}
+    
+    print "\t\tAdding reference to external CMDI metadata"
+    foliadoc.metadatatype = folia.MetaDataType.CMDI
+    foliadoc.metadatafile = os.path.basename(filename) + '.cmdi'        
+
     
     print "\t\tDone"    
     return foliadoc
@@ -172,21 +187,21 @@ def foliatoplaintext(doc, filename):
     global foliadir
     print "\tConversion to plaintext:"
     try:
-        f = codecs.open(foliadir + getfilename(filename).replace('.xml','.tok.txt'),'w','utf-8')
+        f = codecs.open(foliadir + getfilename(filename) + '.tok.txt','w','utf-8')
         f.write(unicode(doc))    
         f.close()        
         print "\t\tDone"    
     except Exception as e:
-        errout("\t\tERROR saving " + foliadir + getfilename(filename).replace('.xml','.tok.txt') + ": " + str(e))
+        errout("\t\tERROR saving " + foliadir + getfilename(filename) + '.tok.txt' + ": " + str(e))
 
 def foliatodcoi(doc, filename):
     global dcoidir
     print "\tConversion back to D-Coi XML:"
     try:
-        #doc.savedcoi(dcoidir + getfilename(filename))
+        doc.savedcoi(dcoidir + getfilename(filename) + '.dcoi.xml')
         pass
     except:
-        errout("ERROR saving " + dcoidir + getfilename(filename))
+        errout("ERROR saving " + dcoidir + getfilename(filename) + '.dcoi.xml')
         
     
 def validate(filepath):
@@ -234,9 +249,8 @@ def retag(doc, i):
 def process(data):
     global foliadir, indexlength
     try:
-        i, filepath = data
-        category = os.path.basename(os.path.dirname(filepath))
-        progress = round((i+1) / float(indexlength) * 100,1)    
+        filepath, args, kwargs = data
+        category = os.path.basename(os.path.dirname(filepath))        
         s =  "#" + str(i+1) + " " + filepath + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
         print s
         print >>sys.stderr, s
@@ -266,16 +280,16 @@ def process(data):
         print "\tSaving:"
         #Save document
         try:        
-            foliadoc.save(foliadir + getfilename(filepath))
-            print "\t\t" + foliadir + getfilename(filepath)
+            foliadoc.save(foliadir + getfilename(filepath) + '.folia.xml')
+            print "\t\t" + foliadir + getfilename(filepath) + '.folia.xml'
         except Exception as e:
-            errout("\t\tERROR saving " + foliadir + getfilename(filepath) + ": " + str(e))
+            errout("\t\tERROR saving " + foliadir + getfilename(filepath) + ".folia.xml : " + str(e))
             return False
         
         #Integrity Check
         succes = integritycheck(foliadoc, filepath, content, parseddcoi)
         
-        validate(foliadir + getfilename(filepath))
+        validate(foliadir + getfilename(filepath) + '.folia.xml')
         
         #FoLiA to D-Coi
         #foliatodcoi(foliadoc, filepath)
@@ -289,7 +303,7 @@ def process(data):
     return True
 
 def getfilename(filename):
-    #find filename base, strip extensions and path (only .xml stays)
+    #find filename base, strip extensions and path
     global sonardir
     filename = filename.replace(sonardir,'')
     if filename[-4:] == '.pos':
@@ -297,6 +311,8 @@ def getfilename(filename):
     if filename[-4:] == '.tok':
         filename = filename[:-4]    
     if filename[-4:] == '.ilk':
+        filename = filename[:-4]     
+    if filename[-4:] == '.xml':
         filename = filename[:-4]     
     return filename
                 
@@ -317,10 +333,10 @@ if __name__ == '__main__':
     #Let XSLT do the basic conversion to HTML
     xslt = lxml.etree.parse(xsltfile)
     dcoitofoliatransformer = lxml.etree.XSLT(xslt)
-    #html = transform(xmldoc)    
+    
     
     schema = lxml.etree.RelaxNG(folia.relaxng())
-    #schema.assertValid(doc)
+    
     
     
     if foliadir[-1] != '/': foliadir += '/'
@@ -329,14 +345,22 @@ if __name__ == '__main__':
     except:
         pass
             
-    print "Building index..."
-    index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'pos', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
-    indexlength = len(index)
-    print str(indexlength) + " documents found in " + sonardir
+    maxtasksperchild = 10
+    preindex = True
+    processor = CorpusProcessor(sonardir, process, threads, 'pos',"",lambda x: True, maxtasksperchild,preindex)
+    for i, _ in enumerate(processor):
+        progress = round((i+1) / float(len(processor.index)) * 100,1)    
+        print "#" + str(i) + " - " + str(progress) + '%'
+        
 
+            
+    #print "Building index..."
+    #index = list(enumerate([ x for x in sonar.CorpusFiles(sonardir,'pos', "", lambda x: True, True) if not outputexists(x, sonardir, foliadir) ]))
+    #indexlength = len(index)
+    #print str(indexlength) + " documents found in " + sonardir
     
-    print "Processing..."
-    p = Pool(threads)
-    p.map(process, index )
+    #print "Processing..."
+    #p = Pool(threads)
+    #p.map(process, index )
 
     print "All done."
