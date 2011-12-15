@@ -251,7 +251,7 @@ def process(data):
     try:
         filepath, args, kwargs = data
         category = os.path.basename(os.path.dirname(filepath))        
-        s =  "#" + str(i+1) + " " + filepath + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
+        s =  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  filepath     
         print s
         print >>sys.stderr, s
 
