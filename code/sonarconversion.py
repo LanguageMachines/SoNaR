@@ -347,7 +347,7 @@ if __name__ == '__main__':
             
     maxtasksperchild = 10
     preindex = True
-    processor = CorpusProcessor(sonardir, process, threads, 'pos',"",lambda x: True, maxtasksperchild,preindex)
+    processor = folia.CorpusProcessor(sonardir, process, threads, 'pos',"",lambda x: True, maxtasksperchild,preindex)
     for i, _ in enumerate(processor):
         progress = round((i+1) / float(len(processor.index)) * 100,1)    
         print "#" + str(i) + " - " + str(progress) + '%'
