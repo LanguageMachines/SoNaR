@@ -51,7 +51,7 @@ for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exi
     sys.stdout.flush()
 
 print "RUNNING POOL..."
-for experiment in pool.run():
+for experiment in pool.run(False): #does not halt on error
     sonardoc, tadpoleport, count = experiment.inputdata
     print '#' +str(count) + ')\tDONE\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

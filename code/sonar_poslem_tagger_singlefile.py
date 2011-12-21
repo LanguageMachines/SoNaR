@@ -5,6 +5,7 @@ from pynlpl.formats.sonar import CorpusDocumentX, ns
 from pynlpl.clients.frogclient import FrogClient
 import sys
 import os.path
+import datetime
 
 
 if len(sys.argv) == 3 and sys.argv[2].isdigit():
