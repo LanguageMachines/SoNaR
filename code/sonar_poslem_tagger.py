@@ -55,4 +55,4 @@ for experiment in pool.run(False): #does not halt on error
     sonardoc, tadpoleport, count = experiment.inputdata
     print '#' +str(count) + ')\tDONE\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-
+print "POOL EMPTY.. ALL DONE!"
