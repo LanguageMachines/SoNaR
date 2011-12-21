@@ -11,7 +11,7 @@ if len(sys.argv) == 3 and sys.argv[2].isdigit():
     docname = sys.argv[1]
     port = int(sys.argv[2])
 else:
-    print >>sys.stderr,"Usage: ./sonar_postaglem.py [filename] [frog-port]"
+    print >>sys.stderr,"Usage: ./sonar_poslem_tagger_singlefile.py [filename] [frog-port]"
     print >>sys.stderr, "Please first start a Frog server with: frog --skip=tmp -S 12345 (or some other port number)"
     print >>sys.stderr,"Reads and writes D-Coi XML"    
     
