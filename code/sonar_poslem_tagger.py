@@ -17,15 +17,15 @@ class TagDoc(AbstractExperiment):
         self.startcommand('./sonar_poslem_tagger_singlefile.py', False,sys.stdout,sys.stderr, sonardoc, tadpoleport)
         sys.stdout.flush()
 
-if len(sys.argv) == 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
+if len(sys.argv) >= 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
     sonardir = sys.argv[1]
     poolsize = int(sys.argv[2])
     ports = [ int(x) for x in sys.argv[3:] ]
     pool = ExperimentPool(poolsize)
 else:
-    print >>sys.stderr,"Usage: ./sonar_poslem_tagger.py [sonardir] [#processes] [frog-port] [[frog-port2]]"
+    print >>sys.stderr,"Usage: ./sonar_poslem_tagger.py [sonardir] [#processes] [frog-port] [[frog-port2]] etc.."
     print >>sys.stderr,"Please first start a Frog server with: frog --skip=tmp -S 12345 (or some other port number)"    
-    print >>sys.stderr,"Multiple Frog servers may be used, the script will attempt to balance the load (not optimally though)"    
+    print >>sys.stderr,"Multiple Frog servers may be used (specify multiple ports), the script will attempt to balance the load (not optimally though)"    
     print >>sys.stderr,"Reads and writes D-Coi XML"    
     sys.exit(2)
 
