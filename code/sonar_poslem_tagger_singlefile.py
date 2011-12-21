@@ -19,6 +19,7 @@ else:
 #Make sure Tadpole/Frog server runs with tokeniser and MWU *DISABLED* !
 frogclient = FrogClient('localhost',port) 
 
+print >>sys.stderr, "[" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "] PROCESSING " + docname  + " (port " + str(port) + ")"
 doc = CorpusDocumentX(docname)
 
 processed_doc = False
@@ -31,7 +32,7 @@ for sentence in doc.sentences():
                 process_sentence = True
         if process_sentence:
             processed_doc = True
-            for i, (word, lemma, morph, pos) in enumerate(tadpoleclient.process(words)):
+            for i, (word, lemma, morph, pos) in enumerate(frogclient.process(words)):
                 try:
                     word_id = sentence[i].attrib[ns('xml') + 'id']
                 except: 
