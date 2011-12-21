@@ -12,9 +12,9 @@ class TagDoc(AbstractExperiment):
         super(TagDoc,self).__init__(data, **parameters)
     
     def start(self):
-        sonardoc, tadpoleport, count = self.inputdata
+        sonardoc, port, count = self.inputdata
         print '#' +str(count) + ')\tSTARTING\t' + sonardoc + '\t@ '+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.startcommand('./sonar_poslem_tagger_singlefile.py', False,sys.stdout,sys.stderr, sonardoc, tadpoleport)
+        self.startcommand('./sonar_poslem_tagger_singlefile.py', False,sys.stdout,sys.stderr, sonardoc, port)
         sys.stdout.flush()
 
 if len(sys.argv) >= 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
@@ -47,7 +47,7 @@ for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exi
     if portindex == len(ports):
        portindex = 0
     print '#' + str(i+1) + ')\tQUEING\t' + doc + ' [' + str(ports[portindex]) + ']'
-    pool.append( TagDoc((doc, port, i+1)) )
+    pool.append( TagDoc((doc, ports[portindex], i+1)) )
     sys.stdout.flush()
 
 print "RUNNING POOL..."
