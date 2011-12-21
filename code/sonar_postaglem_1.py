@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 from pynlpl.formats.sonar import CorpusDocumentX, ns
-from pynlpl.clients.tadpoleclient import TadpoleClient
+from pynlpl.clients.frogclient import FrogClient
 import sys
 import os.path
 
@@ -11,10 +11,13 @@ if len(sys.argv) == 3 and sys.argv[2].isdigit():
     docname = sys.argv[1]
     port = int(sys.argv[2])
 else:
-    print >>sys.stderr,"Usage: ./sonar_postaglem.py [sonar-root-directory] [port]"
-
+    print >>sys.stderr,"Usage: ./sonar_postaglem.py [filename] [frog-port]"
+    print >>sys.stderr, "Please first start a Frog server with: frog --skip=tmp -S 12345 (or some other port number)"
+    print >>sys.stderr,"Reads and writes D-Coi XML"    
+    
+    
 #Make sure Tadpole/Frog server runs with tokeniser and MWU *DISABLED* !
-tadpoleclient = TadpoleClient('localhost',port) 
+frogclient = FrogClient('localhost',port) 
 
 doc = CorpusDocumentX(docname)
 

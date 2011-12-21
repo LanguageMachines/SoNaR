@@ -20,32 +20,34 @@ class TagDoc(AbstractExperiment):
 if len(sys.argv) == 3 and os.path.isdir(sys.argv[1]) and sys.argv[2].isdigit():
     sonardir = sys.argv[1]
     poolsize = int(sys.argv[2])
+    ports = [ int(x) for x in sys.argv[3:] ]
     pool = ExperimentPool(poolsize)
 else:
-    print >>sys.stderr,"Usage: ./sonar_postaglem_master.py [sonardir] [#processes] "
+    print >>sys.stderr,"Usage: ./sonar_postaglem.py [sonardir] [#processes] [frog-port] [[frog-port2]]"
+    print >>sys.stderr,"Please first start a Frog server with: frog --skip=tmp -S 12345 (or some other port number)"    
+    print >>sys.stderr,"Multiple Frog servers may be used, the script will attempt to balance the load (not optimally though)"    
+    print >>sys.stderr,"Reads and writes D-Coi XML"    
     sys.exit(2)
 
 #start five tadpoles with tokeniser and MWU *DISABLED*, ports 12350 onward
+#print "SPAWNING FROGS..."
+#BEGINPORT = 12350
 
-print "SPAWNING FROGS..."
-
-BEGINPORT = 12350
-
-ports = range(BEGINPORT, BEGINPORT+poolsize)
-if len(ports) >= 7:
-    raise Exception("Don't start too many frogs!")
-for port in ports:
-    os.system('Frog --skip=tmp -S ' + str(port) + ' &')
+#ports = range(BEGINPORT, BEGINPORT+poolsize)
+#if len(ports) >= 7:
+#    raise Exception("Don't start too many frogs!")
+#for port in ports:
+#    os.system('Frog --skip=tmp -S ' + str(port) + ' &')
 
 print "POPULATING POOL.."
 
-tadpoleport = BEGINPORT - 1
+portindex = -1
 for i, doc in enumerate(CorpusFiles(sonardir,'tok',"", lambda f: not os.path.exists(f + '.pos') )): #read the *.tok files, on condition there are no *.pos equivalents
-    tadpoleport += 1
-    if tadpoleport == BEGINPORT + poolsize:
-        tadpoleport = BEGINPORT
-    print '#' + str(i+1) + ')\tQUEING\t' + doc + ' [' + str(tadpoleport) + ']'
-    pool.append( TagDoc((doc, tadpoleport, i+1)) )
+    portindex += 1
+    if portindex == len(ports):
+       portindex = 0
+    print '#' + str(i+1) + ')\tQUEING\t' + doc + ' [' + str(ports[portindex]) + ']'
+    pool.append( TagDoc((doc, port, i+1)) )
     sys.stdout.flush()
 
 print "RUNNING POOL..."
