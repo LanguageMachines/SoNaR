@@ -35,7 +35,7 @@ def process(data):
     try:
         doc = folia.Document(file=filepath)
         if doc.declared(folia.AnnotationType.ENTITY, 'sonar-ner'):
-            print >>sys.stderr, "WARNING: Document is already NER tagged, skipping"
+            print >>sys.stderr, "WARNING: Document " + filepath +  " is already NER tagged, skipping"
             return
     except:
         print >>sys.stderr, "ERROR: Error whilst reading FoLiA Document " + filepath
@@ -60,7 +60,7 @@ def process(data):
     #Run NERD
     r = os.system(NERDDIR + 'nerd_for_sonar.py -i ' + tmpfile + ' -e utf-8')
     if r != 0:
-        print >>sys.stderr, "ERROR: NERD failed with exit code " + str(r)
+        print >>sys.stderr, "ERROR: NERD failed with exit code " + str(r) + " (" + filepath + ")"
         return
             
     #Read NER Output and integrate in FoLiA        
@@ -68,7 +68,7 @@ def process(data):
     
     
     if not os.path.exists(tmpfile):
-        print >>sys.stderr, "ERROR: Expected output file " + tmpfile + ".ner not found! Error in NERD system?"
+        print >>sys.stderr, "ERROR: Expected output file " + tmpfile + ".ner not found! Error in NERD system? (" + filepath + ")"
         return
     else:
         iobclass = None
@@ -84,7 +84,7 @@ def process(data):
                             iobclass = fields[2][2:]
                         except:
                             iobclass = 'unknown'
-                            print >>sys.stderr,"WARNING: No class found for B tag! Falling back to 'unknown'"
+                            print >>sys.stderr,"WARNING: No class found for B tag! Falling back to 'unknown' (" + filepath + ")"
                         tokens = []
                         try: 
                             tokens.append(doc[id])
@@ -116,7 +116,7 @@ def process(data):
             os.unlink(tmpfile + '.ner')
             os.unlink(tmpfile + '.crf_in')
         except:
-            print >>sys.stderr, "Warning: cleanup failed"
+            print >>sys.stderr, "Warning: cleanup failed (" + filepath + ")"
             
         s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
 
