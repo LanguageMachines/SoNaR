@@ -94,7 +94,7 @@ def process(data):
                         
                         annotationlayers = doc[id].sentence().select(folia.EntitiesLayer)
                         if annotationlayers:
-                            annotationlayer = annotationlayer[0]
+                            annotationlayer = annotationlayers[0]
                         else:
                             annotationlayer = doc[id].sentence().append(folia.EntitiesLayer)
                         
