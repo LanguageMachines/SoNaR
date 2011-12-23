@@ -14,12 +14,16 @@ TMPDIR = '/tmp/'
 NERDDIR = '/exp2/NERD/nerd_voor_sonar/'
 
 try:
-    sonardir = sys.argv[1]
-    threads = int(sys.argv[2])
+    sonardir = sys.argv[1]    
 except:
-    print >>sys.stderr, "Usage: sonar_ner.py sonardir-or-single-document-file #processes"
+    print >>sys.stderr, "Usage: sonar_ner.py sonardir-or-single-document-file [#processes]"
     print >>sys.stderr, "Reads FoLiA XML, runs NERD for each document, and integrates the results"
     sys.exit(2)
+    
+try:
+    threads = int(sys.argv[2])    
+except:
+    threads = 1
 
 def process(data):
     global foliadir, indexlength, TMPDIR
