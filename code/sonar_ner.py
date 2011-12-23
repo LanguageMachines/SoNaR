@@ -6,11 +6,12 @@ import sys
 import random
 import os
 import datetime
+import codecs
 
 random.seed()
 
-TMPDIR = '/tmp'
-NERDDIR = '/exp2/NERD/'
+TMPDIR = '/tmp/'
+NERDDIR = '/exp2/NERD/nerd_voor_sonar/'
 
 try:
     sonardir = sys.argv[1]
@@ -43,9 +44,9 @@ def process(data):
     for i,sentence in enumerate(sentences):
         for word in sentence.words():
             try:
-                f.write(word.id() + '\t' + word.text() + '\t' + word.pos() + '\t' + word.lemma() + '\n')
+                f.write(word.id + '\t' + word.text() + '\t' + word.pos() + '\t' + word.lemma() + '\n')
             except:
-                print >>sys.stderr, "WARNING: insufficient data for " + word.id() + ": skipping"
+                print >>sys.stderr, "WARNING: insufficient data for " + word.id + ": skipping"
         if i == len(sentences) - 1:
             f.write('\n') #empty line between sentences        
     f.close()
