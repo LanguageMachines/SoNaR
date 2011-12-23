@@ -75,7 +75,11 @@ def process(data):
                     id = fields[0]
                     iobtag = fields[2][0]
                     if iobtag == 'B':
-                        iobclass = fields[2][1:]
+                        try:                        
+                            iobclass = fields[2][3:]
+                        except:
+                            iobclass = 'unknown'
+                            print >>sys.stderr,"WARNING: No class found for B tag! Falling back to 'unknown'"
                         tokens = []
                         try: 
                             tokens.append(doc[id])
