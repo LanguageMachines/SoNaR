@@ -16,7 +16,7 @@ try:
 except:
     print >>sys.stderr, "Usage: sonar_ner.py sonardir #processes"
     print >>sys.stderr, "Reads FoLiA XML, runs NERD for each document, and integrates the results"
-    
+    sys.exit(2)
 
 def process(data):
     global foliadir, indexlength, TMPDIR
