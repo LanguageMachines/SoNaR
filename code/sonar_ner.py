@@ -41,7 +41,7 @@ def process(data):
     tmpfile = TMPDIR + str(random.randint(1000,1000000))
     f = codecs.open(tmpfile, 'w','utf-8')                
     
-    for sentence in enumerate(doc.sentences()):
+    for sentence in doc.sentences():
         words = sentence.words()
         for i, word in enumerate(words):
             try:
@@ -59,7 +59,7 @@ def process(data):
         return
             
     #Read NER Output and integrate in FoLiA        
-    doc.declare(folia.EntityAnnotation, 'sonar-ner')
+    doc.declare(folia.AnnotationType.ENTITY,'sonar-ner')
     
     
     if not os.path.exists(tmpfile):
@@ -67,7 +67,7 @@ def process(data):
         return
     else:
         iobclass = None
-        f = codecs.open(tmpfile + '.ner', 'w','utf-8')                
+        f = codecs.open(tmpfile + '.ner', 'r','utf-8')                
         for line in f:
             if line.strip():
                 fields = line.strip().split('\t')                
