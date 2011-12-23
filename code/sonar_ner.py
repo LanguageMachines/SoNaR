@@ -76,7 +76,7 @@ def process(data):
                     iobtag = fields[2][0]
                     if iobtag == 'B':
                         try:                        
-                            iobclass = fields[2][3:]
+                            iobclass = fields[2][2:]
                         except:
                             iobclass = 'unknown'
                             print >>sys.stderr,"WARNING: No class found for B tag! Falling back to 'unknown'"
