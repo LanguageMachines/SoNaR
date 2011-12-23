@@ -14,7 +14,7 @@ try:
     sonardir = sys.argv[1]
     threads = int(sys.argv[2])
 except:
-    print >>sys.stderr, "Usage: sonar_ner.py sonardir #processes"
+    print >>sys.stderr, "Usage: sonar_ner.py sonardir-or-single-document-file #processes"
     print >>sys.stderr, "Reads FoLiA XML, runs NERD for each document, and integrates the results"
     sys.exit(2)
 
@@ -103,13 +103,17 @@ def process(data):
         doc.save()
 
 
-maxtasksperchild = 25
-preindex = True
+if os.path.isfile(sonardir):
+    process( (sonardir,[],{}) )
+elif os.path.isdir(sonardir):
+    maxtasksperchild = 25
+    preindex = True
 
-processor = folia.CorpusProcessor(sonardir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
-for output in processor.run():
-    if output: 
-        print output
+    processor = folia.CorpusProcessor(sonardir, process, threads, 'folia.xml', "",lambda x: True, maxtasksperchild,preindex)
+    for output in processor.run():
+        if output: 
+            print output
 
-
+else:
+    print >>sys.stderr, "Invalid SoNaR directory"
 
