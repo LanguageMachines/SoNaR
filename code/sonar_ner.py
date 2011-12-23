@@ -23,20 +23,19 @@ except:
 def process(data):
     global foliadir, indexlength, TMPDIR
     filepath, args, kwargs = data
-    s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] ' + filepath
+    s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Processing ' + filepath
     print >>sys.stderr, s        
     
     #Load FoLiA document
     try:
         doc = folia.Document(file=filepath)
-        if doc.declared(folia.EntityAnnotation, 'sonar-ner'):
+        if doc.declared(folia.AnnotationType.ENTITY, 'sonar-ner'):
             print >>sys.stderr, "WARNING: Document is already NER tagged, skipping"
         return
     except:
         print >>sys.stderr, "ERROR: Error whilst reading FoLiA Document " + filepath
         return        
-    
-    
+        
     
     #Prepare NER input
     tmpfile = TMPDIR + str(random.randint(1000,1000000))
@@ -57,9 +56,7 @@ def process(data):
     if r != 0:
         print >>sys.stderr, "ERROR: NERD failed with exit code " + str(r)
         return
-    
-    
-    
+            
     #Read NER Output and integrate in FoLiA        
     doc.declare(folia.EntityAnnotation, 'sonar-ner')
     
@@ -104,6 +101,7 @@ def process(data):
         
         doc.save()
 
+        s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
 
 if os.path.isfile(sonardir):
     process( (sonardir,[],{}) )
