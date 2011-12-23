@@ -22,7 +22,7 @@ except:
 def process(data):
     global foliadir, indexlength, TMPDIR
     filepath, args, kwargs = data
-    s =  "#" + str(i+1) + " " + filepath + ' ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  str(progress) + '%'    
+    s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] ' + filepath
     print >>sys.stderr, s        
     
     #Load FoLiA document
