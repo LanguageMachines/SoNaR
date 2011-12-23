@@ -40,15 +40,16 @@ def process(data):
     #Prepare NER input
     tmpfile = TMPDIR + str(random.randint(1000,1000000))
     f = codecs.open(tmpfile, 'w','utf-8')                
-    sentences = doc.sentences()
-    for i,sentence in enumerate(sentences):
-        for word in sentence.words():
+    
+    for sentence in enumerate(doc.sentences()):
+        words = sentence.words()
+        for i, word in enumerate(words):
             try:
                 f.write(word.id + '\t' + word.text() + '\t' + word.pos() + '\t' + word.lemma() + '\n')
             except:
                 print >>sys.stderr, "WARNING: insufficient data for " + word.id + ": skipping"
-        if i == len(sentences) - 1:
-            f.write('\n') #empty line between sentences        
+            if i == len(words) - 1:
+                f.write('\n') #empty line between sentences        
     f.close()
     
     #Run NERD
