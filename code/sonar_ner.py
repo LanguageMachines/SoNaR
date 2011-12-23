@@ -107,6 +107,13 @@ def process(data):
         
         doc.save()
 
+        try:
+            os.unlink(tmpfile)
+            os.unlink(tmpfile + '.ner')
+            os.unlink(tmpfile + '.crf_in')
+        except:
+            print >>sys.stderr, "Warning: cleanup failed"
+            
         s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
 
 if os.path.isfile(sonardir):
