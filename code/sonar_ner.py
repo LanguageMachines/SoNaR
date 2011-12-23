@@ -31,7 +31,6 @@ def process(data):
         doc = folia.Document(file=filepath)
         if doc.declared(folia.AnnotationType.ENTITY, 'sonar-ner'):
             print >>sys.stderr, "WARNING: Document is already NER tagged, skipping"
-        return
     except:
         print >>sys.stderr, "ERROR: Error whilst reading FoLiA Document " + filepath
         return        
