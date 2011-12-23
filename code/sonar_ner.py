@@ -4,6 +4,7 @@
 from pynlpl.formats import folia
 import sys
 import random
+import os
 
 random.seed()
 
