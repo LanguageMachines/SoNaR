@@ -107,7 +107,9 @@ maxtasksperchild = 25
 preindex = True
 
 processor = folia.CorpusProcessor(sonardir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
-processor.run()
+for output in processor.run():
+    if output: 
+        print output
 
 
 
