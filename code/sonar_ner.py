@@ -88,12 +88,20 @@ def process(data):
                         tokens = []
                         try: 
                             tokens.append(doc[id])
-                        except:
+                        except KeyError:
                             print >>sys.stderr, "ERROR: Unable to resolve ID " + id + "!!!"
                     elif iobtag == 'I':
+                        if not iobclass:
+                            print >>sys.stderr,"NOTICE: I tag without B tag " + id
+                            try:                        
+                                iobclass = fields[2][2:]
+                            except:
+                                iobclass = 'unknown'
+                                print >>sys.stderr,"WARNING: No class found for I tag! Falling back to 'unknown' (" + filepath + ")"
+                            tokens = []							
                         try:
                             tokens.append(doc[id])
-                        except:
+                        except KeyError:
                             print >>sys.stderr, "ERROR: Unable to resolve ID " + id + "!!!"
                     if iobclass and (iobtag == 'O' or doc[id] == doc[id].sentence().words(-1)):  #O tag or last word of sentence
                         
