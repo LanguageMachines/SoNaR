@@ -92,7 +92,7 @@ def process(data):
                             print >>sys.stderr, "ERROR: Unable to resolve ID " + id + "!!!"
                     elif iobtag == 'I':
                         if not iobclass:
-                            print >>sys.stderr,"NOTICE: I tag without B tag " + id
+                            print >>sys.stderr,"NOTICE: I tag without B tag: " + id
                             try:                        
                                 iobclass = fields[2][2:]
                             except:
