@@ -138,6 +138,7 @@ def process(data):
             print >>sys.stderr, "Warning: cleanup failed (" + filepath + ")"
             
         s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
+        print >>sys.stderr, s
         return 0
 
 if os.path.isfile(sonardir):
