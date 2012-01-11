@@ -7,6 +7,7 @@ import random
 import os
 import datetime
 import codecs
+import subprocess
 
 random.seed()
 
@@ -66,7 +67,7 @@ def process(data):
     f.close()
     
     #Run NERD
-    r = os.system(NERDDIR + 'nerd_for_sonar.py -i ' + tmpfile + ' -e utf-8')
+    r = subprocess.call(NERDDIR + 'nerd_for_sonar.py -i ' + tmpfile + ' -e utf-8', stdout=sys.stdout,stderr=sys.stderr)
     if r != 0:
         print >>sys.stderr, "ERROR: NERD failed with exit code " + str(r) + " (" + filepath + ")"
         return 1
