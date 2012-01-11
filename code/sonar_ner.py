@@ -146,19 +146,19 @@ elif os.path.isdir(sonardir):
     maxtasksperchild = 25
     preindex = True
 
-    processed = errors = skipped = 0
+    success = errors = skipped = 0
 
     processor = folia.CorpusProcessor(sonardir, process, threads, 'folia.xml', "",lambda x: True, maxtasksperchild,preindex)
     for output in processor.run():
         if output == 0: 
-            processed += 1
+            success += 1
         elif output == 1:
             errors += 1
         elif output == 2:
             skipped += 1
 
     print >>sys.stderr,"All done..."
-    print >>sys.stderr,"Succesfully processed files:    " + str(processed)
+    print >>sys.stderr,"Succesfully processed files:    " + str(success)
     print >>sys.stderr,"Unprocessed due to errors:      " + str(errors)
     print >>sys.stderr,"Skipped files (already tagged): " + str(skipped)
 
