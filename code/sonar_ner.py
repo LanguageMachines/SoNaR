@@ -132,8 +132,13 @@ def process(data):
         
         if outputdir:
             doc.save(outputdir + '/' + os.path.basename(doc.filename))
+            s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + outputdir + '/' + os.path.basename(doc.filename)
+            print >>sys.stderr, s
         else:
             doc.save()
+            s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
+            print >>sys.stderr, s
+
 
         try:
             os.unlink(tmpfile)
@@ -144,8 +149,6 @@ def process(data):
         except:
             print >>sys.stderr, "Warning: cleanup failed (" + filepath + ")"
             
-        s =  "[" +  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '] Saved ' + filepath
-        print >>sys.stderr, s
         return 0
 
 if os.path.isfile(sonardir):
