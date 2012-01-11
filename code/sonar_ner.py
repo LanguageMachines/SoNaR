@@ -32,7 +32,10 @@ try:
     outputdir = sys.argv[3]    
 except:
     outputdir = None
-
+    
+if outputdir and not os.path.isdir(outputdir):
+    print sys.stderr,"ERROR: Output directory " + outputdir + " does not exist"
+    sys.exit(1)
 
 def process(data):
     global foliadir, indexlength, TMPDIR, outputdir
