@@ -56,6 +56,7 @@ def process(data):
     
     #Prepare NER input
     tmpfile = TMPDIR + str(random.randint(1000,1000000))
+    print >>sys.stderr, "\t(Temporary file: " + tmpfile + ")"
     f = codecs.open(tmpfile, 'w','utf-8')                
     
     for sentence in doc.sentences():
@@ -70,7 +71,7 @@ def process(data):
     f.close()
     
     #Run NERD
-    r = subprocess.call(NERDDIR + 'nerd_for_sonar.py -i ' + tmpfile + ' -e utf-8', shell=True,stdout=subprocess.STDOUT,stderr=subprocess.STDERR)
+    r = subprocess.call(NERDDIR + 'nerd_for_sonar.py -i ' + tmpfile + ' -e utf-8 > ' + tmpfile + '.stdout 2> ' + tmpfile + '.stderr', shell=True)
     if r != 0:
         print >>sys.stderr, "ERROR: NERD failed with exit code " + str(r) + " (" + filepath + ")"
         return 1
@@ -136,6 +137,8 @@ def process(data):
 
         try:
             os.unlink(tmpfile)
+            os.unlink(tmpfile + '.stdout')
+            os.unlink(tmpfile + '.stderr')
             os.unlink(tmpfile + '.ner')
             os.unlink(tmpfile + '.crf_in')
         except:
