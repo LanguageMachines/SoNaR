@@ -4,7 +4,6 @@
 from pynlpl.formats.sonar import CorpusDocumentX, ns
 from pynlpl.clients.frogclient import FrogClient
 import sys
-import os.path
 import datetime
 
 
@@ -36,8 +35,11 @@ for sentence in doc.sentences():
             for i, (word, lemma, morph, pos) in enumerate(frogclient.process(words)):
                 try:
                     word_id = sentence[i].attrib[ns('xml') + 'id']
-                except: 
-                    print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id']
+                except KeyError: 
+                    print >>sys.stderr, "ERROR: Unable to extract ID attribute!"  
+                    break
+                except IndexError: 
+                    print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ' - ' + word.encode('utf-8') 
                     break
                 if pos:
                     doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
