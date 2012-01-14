@@ -39,7 +39,7 @@ for sentence in doc.sentences():
                     print >>sys.stderr, "ERROR: Unable to extract ID attribute!"  
                     break
                 except IndexError: 
-                    print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ' - ' + word.encode('utf-8') 
+                    print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ': ' + word.encode('utf-8') + '. Source has '  + str(len(sentence)) + ' words.' 
                     break
                 if pos:
                     doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
