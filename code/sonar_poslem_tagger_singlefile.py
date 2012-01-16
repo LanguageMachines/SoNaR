@@ -32,7 +32,7 @@ for sentence in doc.sentences():
                 process_sentence = True
         if process_sentence:
             processed_doc = True
-            for i, (word, lemma, morph, pos) in enumerate(frogclient.process(words,'iso-8859-15')):
+            for i, (word, lemma, morph, pos) in enumerate(frogclient.process_aligned(words,'iso-8859-15')):
                 if word:
                     try:
                         word_id = sentence[i].attrib[ns('xml') + 'id']
