@@ -33,18 +33,19 @@ for sentence in doc.sentences():
         if process_sentence:
             processed_doc = True
             for i, (word, lemma, morph, pos) in enumerate(frogclient.process(words,'iso-8859-15')):
-                try:
-                    word_id = sentence[i].attrib[ns('xml') + 'id']
-                except KeyError: 
-                    print >>sys.stderr, "ERROR: Unable to extract ID attribute!"  
-                    break
-                except IndexError: 
-                    print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ': ' + word.encode('utf-8') + '. Source has '  + str(len(sentence)) + ' words.' 
-                    break
-                if pos:
-                    doc[word_id].attrib['pos'] = pos
-                if lemma:
-                    doc[word_id].attrib['lemma'] = lemma
+                if word:
+                    try:
+                        word_id = sentence[i].attrib[ns('xml') + 'id']
+                    except KeyError: 
+                        print >>sys.stderr, "ERROR: Unable to extract ID attribute!"  
+                        break
+                    except IndexError: 
+                        print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ': ' + word.encode('utf-8') + '. Source has '  + str(len(sentence)) + ' words.' 
+                        break
+                    if pos:
+                        doc[word_id].attrib['pos'] = pos
+                    if lemma:
+                        doc[word_id].attrib['lemma'] = lemma
 if processed_doc:
     try:
         doc.save(doc.filename+'.pos') #write .tok.pos files
