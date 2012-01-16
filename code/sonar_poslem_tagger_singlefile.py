@@ -28,7 +28,7 @@ for sentence in doc.sentences():
 
         process_sentence = False
         for x in sentence:
-            if not ns('dcoi') + 'pos' in x.attrib or not ns('dcoi') + 'lemma' in x.attrib:
+            if not (ns('dcoi') + 'pos' in x.attrib or ns('dcoi') + 'lemma' in x.attrib or 'pos' in x.attrib or 'lemma' in x.attrib):
                 process_sentence = True
         if process_sentence:
             processed_doc = True
@@ -42,9 +42,9 @@ for sentence in doc.sentences():
                     print >>sys.stderr, "ERROR: words out of sync in " + sentence.attrib[ns('xml') + 'id'] + ': Unable to resolve word ' + str(i+1) + ': ' + word.encode('utf-8') + '. Source has '  + str(len(sentence)) + ' words.' 
                     break
                 if pos:
-                    doc[word_id].attrib[ns('dcoi') + 'pos'] = pos
+                    doc[word_id].attrib['pos'] = pos
                 if lemma:
-                    doc[word_id].attrib[ns('dcoi') + 'lemma'] = lemma
+                    doc[word_id].attrib['lemma'] = lemma
 if processed_doc:
     try:
         doc.save(doc.filename+'.pos') #write .tok.pos files
