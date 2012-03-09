@@ -74,7 +74,11 @@ def process(data):
     freqlist_lemmapos = FrequencyList()
     
     for word in folia.Reader(filepath, folia.Word):
-        freqlist_word.count(word.text())
+        try:
+            freqlist_word.count(word.text())
+        except folia.NoSuchText:
+            print >>sys.stderr, "ERROR: Got NoSuchText error on " + word.id + " !!!"
+            continue
         if word.lemma():
             freqlist_lemma.count(word.lemma())
             if word.pos():
