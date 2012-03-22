@@ -121,7 +121,9 @@ if __name__ == '__main__':
     maxtasksperchild = 10
     preindex = True
     processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
-    for i, data in enumerate(processor):
+    i = 0
+    for data in processor:
+        
         
         filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos = data
         
@@ -145,7 +147,8 @@ if __name__ == '__main__':
 
         progress = round((i+1) / float(len(processor.index)) * 100,1)    
         print "#" + str(i) + " - " + str(progress) + '%'
-        
+                
+        i += 1
         
 print "Saving frequency lists by category"
         
