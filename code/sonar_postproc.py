@@ -18,7 +18,12 @@ import codecs
 def process(data):
     global foliadir, indexlength, inputdir, outputdir
 
-    filepath, args, kwargs = data        
+    filepath, args, kwargs = data
+    outputfile = filepath.replace(inputdir, outputdir)
+    if os.path.exists(outputfile):
+        print >>sys.stderr, "Skipping " + filepath + " (output file already exists)"
+        return None,None,None,None
+            
     s =  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  filepath     
     print >>sys.stderr, s
 
@@ -29,6 +34,8 @@ def process(data):
         ('<lemma-annotation annotator="tadpole" annotatortype="auto" set="http://ilk.uvt.nl/folia/sets/lemmas-nl"/>', '<lemma-annotation annotator="frog" annotatortype="auto" set="hdl:1839/00-SCHM-0000-0000-000E-3"/>'),        
         ('<entity-annotation set="sonar-ner"/>','<entity-annotation annotator="NERD" annotatortype="auto" set="hdl:1839/00-SCHM-0000-0000-000D-5"/>')
     ]
+    
+
     
     
     f = codecs.open(filepath,'r','utf-8')
@@ -61,7 +68,7 @@ def process(data):
     if hasgap and gapinsertpoint > 0:        
         outputlines.insert(gapinsertpoint, '<gap-annotation />\n')
 
-    outputfile = filepath.replace(inputdir, outputdir)
+    
     dir = os.path.dirname(outputfile)
     if not os.path.isdir(dir):
         os.mkdir( os.path.dirname(outputfile))
@@ -129,27 +136,29 @@ if __name__ == '__main__':
     print >>sys.stderr,"Processing..."
     for i, data in enumerate(processor):
         filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos = data
-        
-        category = None
-        for e in filepath.split('/'):
-            if e[-4:] != '.xml' and e[:3] == 'WR-' or e[:3] == 'WS-':
-                category = e
-        if not category:
-            print >>sys.stderr, "No category found for: " + filepath
-            sys.exit(2)
-        
-        if not category in cat_freqlist_word: 
-            cat_freqlist_word[category] = FrequencyList()
-            cat_freqlist_lemma[category] = FrequencyList()
-            cat_freqlist_lemmapos[category] = FrequencyList()
-                        
-        
-        cat_freqlist_word[category] += freqlist_word
-        cat_freqlist_lemma[category] += freqlist_lemma
-        cat_freqlist_lemmapos[category] += freqlist_lemmapos
+        if filepath:
+            category = None
+            for e in filepath.split('/'):
+                if e[-4:] != '.xml' and e[:3] == 'WR-' or e[:3] == 'WS-':
+                    category = e
+            if not category:
+                print >>sys.stderr, "No category found for: " + filepath
+                sys.exit(2)
+            
+            if not category in cat_freqlist_word: 
+                cat_freqlist_word[category] = FrequencyList()
+                cat_freqlist_lemma[category] = FrequencyList()
+                cat_freqlist_lemmapos[category] = FrequencyList()
+                            
+            
+            cat_freqlist_word[category] += freqlist_word
+            cat_freqlist_lemma[category] += freqlist_lemma
+            cat_freqlist_lemmapos[category] += freqlist_lemmapos
 
-        progress = round((i+1) / float(len(processor.index)) * 100,1)    
-        print "#" + str(i) + " - " + str(progress) + '%'
+            progress = round((i+1) / float(len(processor.index)) * 100,1)    
+            print "#" + str(i) + " - " + str(progress) + '%'
+        else:
+            print "#" + str(i) + " - " + str(progress) + '% (skipped)'
                 
         
         
