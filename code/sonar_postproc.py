@@ -35,7 +35,7 @@ def process(data):
     gapinsertpoint = 0
     hasgap = False
     metadata = 0
-    for i, line in enumerate(i, f):
+    for i, line in enumerate(f):
         if metadata == 0 and line.find('<?xml version') != -1:
             outputlines.append(line)
             outputlines.append('<?xml-stylesheet type="text/xsl" href="sonar-foliaviewer.xsl"?>')
@@ -121,10 +121,7 @@ if __name__ == '__main__':
     maxtasksperchild = 10
     preindex = True
     processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
-    i = 0
-    for data in processor:
-        
-        
+    for i, data in enumerate(processor):
         filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos = data
         
         category = None
@@ -148,7 +145,7 @@ if __name__ == '__main__':
         progress = round((i+1) / float(len(processor.index)) * 100,1)    
         print "#" + str(i) + " - " + str(progress) + '%'
                 
-        i += 1
+        
         
 print "Saving frequency lists by category"
         
