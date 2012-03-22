@@ -128,7 +128,7 @@ if __name__ == '__main__':
         
         category = None
         for e in filepath.split('/'):
-            if e[:3] == 'WR-' or e[:3] == 'WS-':
+            if e[-4:] != '.xml' and e[:3] == 'WR-' or e[:3] == 'WS-':
                 category = e
         if not category:
             print >>sys.stderr, "No category found for: " + filepath
