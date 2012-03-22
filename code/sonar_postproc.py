@@ -38,7 +38,7 @@ def process(data):
     for i, line in enumerate(f):
         if metadata == 0 and line.find('<?xml version') != -1:
             outputlines.append(line)
-            outputlines.append('<?xml-stylesheet type="text/xsl" href="sonar-foliaviewer.xsl"?>')
+            outputlines.append('<?xml-stylesheet type="text/xsl" href="sonar-foliaviewer.xsl"?>\n')
             continue        
         if metadata == 0 and line.find('<metadata src=') != -1: 
             metadata = 1
@@ -58,7 +58,7 @@ def process(data):
     f.close()
     
     if hasgap and gapinsertpoint > 0:        
-        outputlines.insert(gapinsertpoint, '<gap-annotation />')
+        outputlines.insert(gapinsertpoint, '<gap-annotation />\n')
     
     f = codecs.open(filepath+'.tmp','w','utf-8')
     for line in outputlines:
