@@ -165,6 +165,6 @@ for cat in cat_freqlist_word:
     
 print "Saving global lists by category"    
     
-total_freqlist_word[cat].save('wordfreqlist.csv')
-total_freqlist_lemma[cat].save('lemmafreqlist.csv')
-total_freqlist_lemmapos[cat].save('lemmaposfreqlist.csv')    
+total_freqlist_word.save('wordfreqlist.csv')
+total_freqlist_lemma.save('lemmafreqlist.csv')
+total_freqlist_lemmapos.save('lemmaposfreqlist.csv')    
