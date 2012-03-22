@@ -60,21 +60,24 @@ def process(data):
     
     if hasgap and gapinsertpoint > 0:        
         outputlines.insert(gapinsertpoint, '<gap-annotation />\n')
+
+    outputfile = filepath.replace(inputdir, outputdir)
+    dir = os.path.dirname(outputfile)
+    if not os.path.isdir(dir):
+        os.mkdir( os.path.dirname(outputfile))
     
-    f = codecs.open(filepath+'.tmp','w','utf-8')
+    tmpfile = filepath.replace(inputdir, outputdir) + '.tmp'
+    f = codecs.open(tmpfile,'w','utf-8')
     for line in outputlines:
         f.write(line)
     f.close()
     
     
-    outputfile = filepath.replace(inputdir, outputdir)
-    dir = os.path.dirname(outputfile)
-    if not os.path.isdir(dir):
-        os.mkdir( os.path.dirname(outputfile))
+
         
 
     try:
-        os.rename(filepath+'.tmp', outputfile )
+        os.rename(tmpfile, outputfile )
     except:
         print >>sys.stderr,"Unable to write file " + outputfile 
     
