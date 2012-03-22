@@ -16,7 +16,7 @@ import codecs
 
 
 def process(data):
-    global foliadir, indexlength
+    global foliadir, indexlength, inputdir, outputdir
 
     filepath, args, kwargs = data        
     s =  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  filepath     
@@ -65,7 +65,17 @@ def process(data):
         f.write(line)
     f.close()
     
-    os.rename(filepath+'.tmp', filepath)
+    
+    outputfile = filepath.replace(inputdir, outputdir)
+    dir = os.path.dirname(outputfile)
+    if not os.path.isdir(dir):
+        os.mkdir( os.path.dirname(outputfile))
+        
+
+    try:
+        os.rename(filepath+'.tmp', outputfile )
+    except:
+        print >>sys.stderr,"Unable to write file " + outputfile 
     
     #COUNT STEP
     
@@ -84,7 +94,7 @@ def process(data):
             if word.pos():
                 freqlist_lemmapos.count( (word.lemma(), word.pos()) )
     
-    return freqlist_word, freqlist_lemma, freqlist_lemmapos
+    return filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos
             
             
         
@@ -95,10 +105,11 @@ def process(data):
 
 if __name__ == '__main__':    
     try:
-        sonardir = sys.argv[1]        
-        threads = int(sys.argv[2])
+        inputdir = sys.argv[1]        
+        outputdir = sys.argv[2]
+        threads = int(sys.argv[3])
     except:
-        print >>sys.stderr,"Syntax: sonar_postproc.py sonardir threads"
+        print >>sys.stderr,"Syntax: sonar_postproc.py inputdir outputdir threads"
         sys.exit(2)
     
     
@@ -109,15 +120,25 @@ if __name__ == '__main__':
 
     maxtasksperchild = 10
     preindex = True
-    processor = folia.CorpusProcessor(sonardir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
+    processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
     for i, data in enumerate(processor):
-        category = 'blah' #TODO: extract category
+        
+        filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos = data
+        
+        category = None
+        for e in filepath.split('/'):
+            if e[:3] == 'WR-' or e[:3] == 'WS-':
+                category = e
+        if not category:
+            print >>sys.stderr, "No category found for: " + filepath
+            sys.exit(2)
+        
         if not category in cat_freqlist_word: 
             cat_freqlist_word[category] = FrequencyList()
             cat_freqlist_lemma[category] = FrequencyList()
             cat_freqlist_lemmapos[category] = FrequencyList()
                         
-        freqlist_word, freqlist_lemma, freqlist_lemmapos = data
+        
         cat_freqlist_word[category] += freqlist_word
         cat_freqlist_lemma[category] += freqlist_lemma
         cat_freqlist_lemmapos[category] += freqlist_lemmapos
