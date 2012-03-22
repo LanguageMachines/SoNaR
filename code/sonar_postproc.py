@@ -158,11 +158,8 @@ for cat in cat_freqlist_word:
     cat_freqlist_lemma[cat].save(cat+'.lemmafreqlist.csv')
     cat_freqlist_lemmapos[cat].save(cat+'.lemmaposfreqlist.csv')
     total_freqlist_word += cat_freqlist_word[cat]
-    del cat_freqlist_word[cat]
     total_freqlist_lemma += cat_freqlist_lemma[cat]
-    del cat_freqlist_lemma[cat]
     total_freqlist_lemmapos += cat_freqlist_lemmapos[cat]
-    del cat_freqlist_lemmapos[cat]
     
 print "Saving global lists by category"    
     
