@@ -120,7 +120,9 @@ if __name__ == '__main__':
 
     maxtasksperchild = 10
     preindex = True
+    print >>sys.stderr,"Initialising (indexing)..."
     processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
+    print >>sys.stderr,"Processing..."
     for i, data in enumerate(processor):
         filepath, freqlist_word, freqlist_lemma, freqlist_lemmapos = data
         
