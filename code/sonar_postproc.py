@@ -131,13 +131,13 @@ if __name__ == '__main__':
         sys.exit(2)
     
     
-    cat_freqlist_word = {}
-    cat_freqlist_lemma = {}
-    cat_freqlist_lemmapos = {}
-
+    cat_freqlist_word = FrequencyList()
+    cat_freqlist_lemma = FrequencyList()
+    cat_freqlist_lemmapos = FrequencyList()
 
     maxtasksperchild = 10
     preindex = True
+    prevcategory = None
     print >>sys.stderr,"Initialising (indexing)..."
     processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
     print >>sys.stderr,"Processing..."
@@ -151,40 +151,55 @@ if __name__ == '__main__':
             if not category:
                 print >>sys.stderr, "No category found for: " + filepath
                 sys.exit(2)
+               
+            if category != prevcategory:
+                if prevcategory:
+                    print >>sys.stderr,"Saving frequency lists for ", prevcategory
+                    #save previous category
+                    cat_freqlist_word.save(outputdir + '/' + prevcategory +'.wordfreqlist.csv',True)
+                    cat_freqlist_lemma.save(outputdir + '/' +prevcategory+'.lemmafreqlist.csv',True)
+                    cat_freqlist_lemmapos.save(outputdir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)    
+
+                print >>sys.stderr,"NEW CATEGORY: ", category
+
+                
+                cat_freqlist_word = FrequencyList()
+                cat_freqlist_lemma = FrequencyList()
+                cat_freqlist_lemmapos = FrequencyList()
+                prevcategory = category
             
-            if not category in cat_freqlist_word: 
-                cat_freqlist_word[category] = FrequencyList()
-                cat_freqlist_lemma[category] = FrequencyList()
-                cat_freqlist_lemmapos[category] = FrequencyList()
-                            
             
-            cat_freqlist_word[category] += freqlist_word
-            cat_freqlist_lemma[category] += freqlist_lemma
-            cat_freqlist_lemmapos[category] += freqlist_lemmapos
+            cat_freqlist_word += freqlist_word
+            cat_freqlist_lemma += freqlist_lemma
+            cat_freqlist_lemmapos += freqlist_lemmapos
 
             progress = round((i+1) / float(len(processor.index)) * 100,1)    
             print "#" + str(i) + " - " + str(progress) + '%'
         else:
             print "#" + str(i) + " - " + str(progress) + '% (skipped)'
                 
+    if prevcategory:
+        #save previous category
+        cat_freqlist_word.save(outputdir + '/' + prevcategory +'.wordfreqlist.csv',True)
+        cat_freqlist_lemma.save(outputdir + '/' +prevcategory+'.lemmafreqlist.csv',True)
+        cat_freqlist_lemmapos.save(outputdir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)        
         
+#print "Saving frequency lists by category"
         
-print "Saving frequency lists by category"
+#total_freqlist_word = FrequencyList()
+#total_freqlist_lemma = FrequencyList()
+#total_freqlist_lemmapos = FrequencyList()        
         
-total_freqlist_word = FrequencyList()
-total_freqlist_lemma = FrequencyList()
-total_freqlist_lemmapos = FrequencyList()        
-        
-for cat in cat_freqlist_word:
-    cat_freqlist_word[cat].save(outputdir + '/' + cat+'.wordfreqlist.csv',True)
-    cat_freqlist_lemma[cat].save(outputdir + '/' + cat+'.lemmafreqlist.csv',True)
-    cat_freqlist_lemmapos[cat].save(outputdir + '/' + cat+'.lemmaposfreqlist.csv',True)
-    total_freqlist_word += cat_freqlist_word[cat]
-    total_freqlist_lemma += cat_freqlist_lemma[cat]
-    total_freqlist_lemmapos += cat_freqlist_lemmapos[cat]
+#for cat in cat_freqlist_word:
+#    cat_freqlist_word[cat].save(outputdir + '/' + cat+'.wordfreqlist.csv',True)
+#    cat_freqlist_lemma[cat].save(outputdir + '/' + cat+'.lemmafreqlist.csv',True)
+#    cat_freqlist_lemmapos[cat].save(outputdir + '/' + cat+'.lemmaposfreqlist.csv',True)
+#    total_freqlist_word += cat_freqlist_word[cat]
+#    total_freqlist_lemma += cat_freqlist_lemma[cat]
+#    total_freqlist_lemmapos += cat_freqlist_lemmapos[cat]
     
-print "Saving global lists by category"    
+#print "Saving global lists by category"    
     
-total_freqlist_word.save(outputdir + '/' + 'wordfreqlist.csv',True)
-total_freqlist_lemma.save(outputdir + '/' + 'lemmafreqlist.csv',True)
-total_freqlist_lemmapos.save(outputdir + '/' + 'lemmaposfreqlist.csv',True)    
+#total_freqlist_word.save(outputdir + '/' + 'wordfreqlist.csv',True)
+#total_freqlist_lemma.save(outputdir + '/' + 'lemmafreqlist.csv',True)
+#total_freqlist_lemmapos.save(outputdir + '/' + 'lemmaposfreqlist.csv',True)    
