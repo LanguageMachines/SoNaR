@@ -20,9 +20,9 @@ def process(data):
     curate = True
     filepath, args, kwargs = data
     outputfile = filepath.replace(inputdir, outputdir)
-    if os.path.exists(outputfile):
-        print >>sys.stderr, "Skipping curation of " + filepath + " (output file already exists)"
-        curate = False
+    #if os.path.exists(outputfile):
+    #    print >>sys.stderr, "Skipping curation of " + filepath + " (output file already exists)"
+    #    curate = False
             
     s =  datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' ' +  filepath     
     print >>sys.stderr, s
@@ -110,9 +110,10 @@ if __name__ == '__main__':
     preindex = True
     prevcategory = None
     print >>sys.stderr,"Initialising (indexing)..."
-    processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: True, maxtasksperchild,preindex)
-    print >>sys.stderr,"Processing..."
+    processor = folia.CorpusProcessor(inputdir, process, threads, 'folia.xml',"",lambda x: not os.path.exists(x.replace(inputdir,outputdir)), maxtasksperchild,preindex)
     l = len(processor.index)
+    print >>sys.stderr,"Indexed " + str(l) + " files for curation"
+    print >>sys.stderr,"Processing..."
     for i ,_ in enumerate(processor.run()):
         progress = round((i+1) / float(l) * 100,1)    
         print "#" + str(i) + " - " + str(progress) + '%'
