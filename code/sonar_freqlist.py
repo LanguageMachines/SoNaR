@@ -57,7 +57,7 @@ def process(data):
 if __name__ == '__main__':    
     try:
         inputdir = sys.argv[1]        
-        threads = int(sys.argv[3])
+        threads = int(sys.argv[2])
     except:
         print >>sys.stderr,"Syntax: sonar_postproc.py inputdir threads"
         sys.exit(2)
