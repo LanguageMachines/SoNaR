@@ -194,7 +194,7 @@
  </div>
 </xsl:template>
 
-<xsl:template match="folia:ttext">
+<xsl:template match="folia:text">
  <div class="text">
  	<xsl:apply-templates />
  </div>
