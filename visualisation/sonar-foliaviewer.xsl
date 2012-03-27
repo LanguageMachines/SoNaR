@@ -23,7 +23,7 @@
 					background: #b7c8c7;
 					font-family: sans-serif;
 					font-size: 10pt;
-					margin-bottom:120px;
+					margin-bottom:240px;
 				}
 
 				div.text {
@@ -172,7 +172,7 @@
 </xsl:template>
 
 
-<xsl:template match="folia:text">
+<xsl:template match="folia:ttext">
  <div class="text">
    <xsl:choose>
    <xsl:when test="/folia:div">
@@ -193,6 +193,13 @@
   </xsl:choose>
  </div>
 </xsl:template>
+
+<xsl:template match="folia:ttext">
+ <div class="text">
+ 	<xsl:apply-templates />
+ </div>
+</xsl:template>
+
 
 <xsl:template match="folia:div">
  <div class="div">
