@@ -176,52 +176,16 @@
 </xsl:template>
 
 
-<xsl:template match="folia:text">
- <div class="text">
- 	<xsl:apply-templates />
- </div>
+
+
+<xsl:template match="folia:pos">
+ <dt>PoS</dt><dd><xsl:value-of select="@class"/></dd>
 </xsl:template>
 
-
-<xsl:template match="folia:div">
- <div class="div">
-  <xsl:apply-templates />
- </div>
+<xsl:template match="folia:lemma">
+ <dt>Lemma</dt><dd><xsl:value-of select="@class"/></dd>
 </xsl:template>
 
-<xsl:template match="folia:event">
- <div class="event">
-  <xsl:apply-templates />
- </div>
-</xsl:template>
-
-
-<xsl:template match="folia:p">
- <p>
-  <xsl:apply-templates />
- </p>
-</xsl:template>
-
-
-<xsl:template match="folia:head">
- <h1>
-  <xsl:apply-templates />
- </h1>
-</xsl:template>
-
-<xsl:template match="folia:s">
- <span class="s">
-  <xsl:apply-templates />
- </span>
-</xsl:template>
-
-<xsl:template match="folia:gap">
- <div class="gap">
-   <pre>
-   	<xsl:value-of select="folia:content"/>
-   </pre>
- </div>
-</xsl:template>
 
 <xsl:template match="folia:w">
  <span id="{@xml:id}" class="word">
@@ -236,12 +200,59 @@
  <xsl:text> </xsl:text> <!-- TODO: implement @nospace check -->
 </xsl:template>
 
-<xsl:template match="folia:pos">
- <dt>PoS</dt><dd><xsl:value-of select="@class"/></dd>
+<xsl:template match="folia:s">
+ <span class="s">
+  <xsl:apply-templates />
+ </span>
 </xsl:template>
 
-<xsl:template match="folia:lemma">
- <dt>Lemma</dt><dd><xsl:value-of select="@class"/></dd>
+
+
+<xsl:template match="folia:head">
+ <h1>
+  <xsl:apply-templates />
+ </h1>
 </xsl:template>
+
+
+
+
+<xsl:template match="folia:p">
+ <p>
+  <xsl:apply-templates />
+ </p>
+</xsl:template>
+
+
+<xsl:template match="folia:event">
+ <div class="event">
+  <xsl:apply-templates />
+ </div>
+</xsl:template>
+
+ <div class="text">
+ 	<xsl:apply-templates />
+ </div>
+</xsl:template>
+
+
+
+<xsl:template match="folia:gap">
+ <div class="gap">
+   <pre>
+   	<xsl:value-of select="folia:content"/>
+   </pre>
+ </div>
+</xsl:template>
+
+
+<xsl:template match="folia:div">
+ <div class="div">
+  <xsl:apply-templates />
+ </div>
+</xsl:template>
+
+
+
 
 </xsl:stylesheet>
