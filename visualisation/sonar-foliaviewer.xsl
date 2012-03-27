@@ -23,6 +23,7 @@
 					background: #b7c8c7;
 					font-family: sans-serif;
 					font-size: 10pt;
+					margin-bottom:120px;
 				}
 
 				div.text {
@@ -105,17 +106,23 @@
 					text-decoration: none; 
 					z-index: 24; 
 				}
-
+				
+				.wordtext {
+					display: inline;
+					text-decoration: none;
+				}
 
 				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
-				.word:hover { 
+				.word:hover>.wordtext { 
 					text-decoration: underline; 
 					z-index: 25
 				}
+				
 				.word:hover>.attributes { 
 					display: block; 
 					position: absolute;
 					width: 320px; 
+					font-size: 12pt;
 					left: 2em; 
 					top: 2em;
 					background: #b4d4d1; /*#FCFFD0;*/
@@ -216,7 +223,7 @@
                         <xsl:apply-templates />
                 </dl>
         </span>
-        <xsl:value-of select="folia:t"/>
+        <span class="wordtext"><xsl:value-of select="folia:t"/></span>
  </span>
  <xsl:text> </xsl:text> <!-- TODO: implement @nospace check -->
 </xsl:template>
