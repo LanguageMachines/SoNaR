@@ -162,7 +162,11 @@
 					padding: 10px;
 					border: 1px solid #4f7d87;
 				}
-           	
+				.gap pre {
+					padding: 5px;
+					background: #ddd;
+					border: 1px dashed red;
+				}           	
             </style>            
         </head>
         <body>
@@ -209,6 +213,14 @@
  <span class="s">
   <xsl:apply-templates />
  </span>
+</xsl:template>
+
+<xsl:template match="folia:gap">
+ <div class="gap">
+   <pre>
+   	<xsl:value-of select="folia:content"/>
+   </pre>
+ </div>
 </xsl:template>
 
 <xsl:template match="folia:w">
