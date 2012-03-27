@@ -207,7 +207,7 @@
  </div>
 </xsl:template>
 
-<xsl:template match="folia:div">
+<xsl:template match="folia:event">
  <div class="event">
   <xsl:apply-templates />
  </div>
