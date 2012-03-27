@@ -76,12 +76,12 @@
 				}
 				.s {
 					display: inline;
-					border-left: 1px none;
-					border-right: 1px none;
+					border-left: 1px white solid;
+					border-right: 1px white solid;
 				}
 				.s:hover {
-					border-left: 1px solid;
-					border-right: 1px solid;
+					border-left: 1px blue solid;
+					border-right: 1px blue solid;
 				}
 				.word { 
 					display: inline; 
@@ -102,26 +102,28 @@
 					margin-right: auto; 
 					color: #222;
 				}
-				.sentence {
-					display: inline;
-				}
+
 				.word { 
 					display: inline; 
 					color: black; 
 					position: relative; 
 					text-decoration: none; 
-					/*z-index: 24;*/ 
+					z-index: 24;
 				}
 				
-				.wordtext {
+				.t {
 					display: inline;
 					text-decoration: none;
+					z-index: 24;
 				}
 
 				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
 				.word:hover { 
-					text-decoration: underline; 
-					/*z-index: 15;*/
+					/*text-decoration: underline;*/ 
+					z-index: 25;
+				}
+				.word:hover>t {
+					text-decoration: underline;
 				}
 				
 				.word:hover>.attributes { 
@@ -136,7 +138,6 @@
 					border: 1px solid #628f8b; 
 					padding: 5px; 
 					text-decoration: none !important;
-					/*z-index: 10;*/ 
 				}
 				.attributes dt {
 					color: #254643;
@@ -224,7 +225,7 @@
 
 <xsl:template match="folia:w">
  <span id="{@xml:id}" class="word">
- 		<xsl:value-of select="folia:t"/>
+ 		<span class="t"><xsl:value-of select="folia:t"/><span>
         <span class="attributes">
                 <span class="wordid"><xsl:value-of select="@xml:id" /></span>
                 <dl>
