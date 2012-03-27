@@ -225,7 +225,7 @@
 
 <xsl:template match="folia:w">
  <span id="{@xml:id}" class="word">
- 		<span class="t"><xsl:value-of select="folia:t"/><span>
+ 		<span class="t"><xsl:value-of select="folia:t"/></span>
         <span class="attributes">
                 <span class="wordid"><xsl:value-of select="@xml:id" /></span>
                 <dl>
