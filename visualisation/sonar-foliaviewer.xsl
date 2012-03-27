@@ -115,7 +115,7 @@
 				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
 				.word:hover>.wordtext { 
 					text-decoration: underline; 
-					z-index: 25
+					z-index: 20;
 				}
 				
 				.word:hover>.attributes { 
@@ -129,7 +129,8 @@
 					opacity: 0.9; filter: alpha(opacity = 90); 
 					border: 1px solid #628f8b; 
 					padding: 5px; 
-					text-decoration: none; 
+					text-decoration: none;
+					z-index: 26; 
 				}
 				.attributes dt {
 					color: #254643;
