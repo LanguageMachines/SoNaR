@@ -166,33 +166,11 @@
             </style>            
         </head>
         <body>
-            <xsl:apply-templates select="folia:text" />
+            <xsl:apply-templates />
         </body>
     </html>
 </xsl:template>
 
-
-<xsl:template match="folia:ttext">
- <div class="text">
-   <xsl:choose>
-   <xsl:when test="/folia:div">
-    <xsl:apply-templates select="/folia:div" />
-   </xsl:when>
-   <xsl:when test="/folia:event">
-     <xsl:apply-templates select="/folia:event" />
-   </xsl:when>
-   <xsl:when test="//folia:p">
-    <xsl:apply-templates select="//folia:p|//folia:head" />
-   </xsl:when>
-   <xsl:when test="//folia:s">
-    <xsl:apply-templates select="//folia:s|//folia:head" />
-   </xsl:when> 
-   <xsl:otherwise>
-    <span class="error">No content found in this text!</span>
-   </xsl:otherwise>
-  </xsl:choose>
- </div>
-</xsl:template>
 
 <xsl:template match="folia:text">
  <div class="text">
