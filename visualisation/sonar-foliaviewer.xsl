@@ -124,7 +124,8 @@
 					/*text-decoration: underline;*/ 
 					z-index: 25;
 				}
-				.word:hover>t {
+				.word:hover>.t {
+					background: #bfc0ed;
 					text-decoration: underline;
 				}
 				
