@@ -222,11 +222,11 @@
 </xsl:template>
 
 <xsl:template match="folia:pos">
- <dt>PoS</dt><dd><xsl:value-of select="@folia:class"/></dd>
+ <dt>PoS</dt><dd><xsl:value-of select="@class"/></dd>
 </xsl:template>
 
 <xsl:template match="folia:lemma">
- <dt>Lemma</dt><dd><xsl:value-of select="@folia:class"/></dd>
+ <dt>Lemma</dt><dd><xsl:value-of select="@class"/></dd>
 </xsl:template>
 
 </xsl:stylesheet>
