@@ -19,12 +19,34 @@
             </xsl:choose>
 			<style type="text/css">
 				body {
-					font-family: serif; 
-					font-size: 1em; 
-					background: #b7c8c7; 
+					/*background: #222222;*/
+					background: #b7c8c7;
+					font-family: sans-serif;
+					font-size: 10pt;
 				}
+
+				div.text {
+					width: 700px;
+					margin-top: 50px;
+					margin-left: auto;
+					margin-right: auto;
+					padding: 10px;    
+					padding-left: 50px;
+					padding-right: 50px;
+					text-align: left;
+					background: white;
+					border: 2px solid black;
+				}
+
+				div.div {
+					padding-left: 0px;
+					padding-top: 10px;
+					padding-bottom: 10px;    
+				}
+
 				#metadata {
 					font-family: sans-serif;
+					width: 700px;
 					font-size: 90%;
 					margin-left: auto;
 					margin-right: auto;
@@ -33,11 +55,33 @@
 					background: #b4d4d1; /*#FCFFD0;*/
 					border: 1px solid #628f8b;
 					width: 40%;
-					max-width:800px;
 					padding: 5px;
 				}
 				#metadata table {
 					text-align: left;
+				}
+
+				#text {
+					border: 1px solid #628f8b;
+					width: 60%; 
+					max-width: 1024px;
+					background: white;
+					padding: 20px;
+					padding-right: 100px; 
+					margin-top: 5px;
+					margin-left: auto; 
+					margin-right: auto; 
+					color: #222;
+				}
+				.sentence {
+					display: inline;
+				}
+				.word { 
+					display: inline; 
+					color: black; 
+					position: relative; 
+					text-decoration: none; 
+					z-index: 24; 
 				}
 				#text {
 					border: 1px solid #628f8b;
@@ -61,14 +105,12 @@
 					text-decoration: none; 
 					z-index: 24; 
 				}
-				.word>.attributes { display: none;  }
+
+
+				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
 				.word:hover { 
 					text-decoration: underline; 
-					z-index: 25;
-				}
-				.event {
-					padding: 10px;
-					border: 1px solid #4f7d87;
+					z-index: 25
 				}
 				.word:hover>.attributes { 
 					display: block; 
@@ -97,7 +139,12 @@
 					color: #555;
 					font-family: monospace;
 					text-align: center;
-				}            	
+				}
+				.event {
+					padding: 10px;
+					border: 1px solid #4f7d87;
+				}
+           	
             </style>            
         </head>
         <body>
