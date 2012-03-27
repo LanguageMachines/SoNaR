@@ -200,12 +200,12 @@
  <xsl:text> </xsl:text> <!-- TODO: implement @nospace check -->
 </xsl:template>
 
+
 <xsl:template match="folia:s">
  <span class="s">
   <xsl:apply-templates />
  </span>
 </xsl:template>
-
 
 
 <xsl:template match="folia:head">
@@ -230,12 +230,11 @@
  </div>
 </xsl:template>
 
+<xsl:template match="folia:text">
  <div class="text">
  	<xsl:apply-templates />
  </div>
 </xsl:template>
-
-
 
 <xsl:template match="folia:gap">
  <div class="gap">
@@ -251,8 +250,5 @@
   <xsl:apply-templates />
  </div>
 </xsl:template>
-
-
-
 
 </xsl:stylesheet>
