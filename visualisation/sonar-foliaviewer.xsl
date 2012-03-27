@@ -75,11 +75,13 @@
 					color: #222;
 				}
 				.s {
+					background: white;
 					display: inline;
 					border-left: 1px white solid;
 					border-right: 1px white solid;
 				}
 				.s:hover {
+					background: #e7e8f8;
 					border-left: 1px blue solid;
 					border-right: 1px blue solid;
 				}
