@@ -74,8 +74,14 @@
 					margin-right: auto; 
 					color: #222;
 				}
-				.sentence {
+				.s {
 					display: inline;
+					border-left: 1px none;
+					border-right: 1px none;
+				}
+				.s:hover {
+					border-left: 1px solid;
+					border-right: 1px solid;
 				}
 				.word { 
 					display: inline; 
@@ -113,7 +119,7 @@
 				}
 
 				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
-				.word:hover>.wordtext { 
+				.word:hover { 
 					text-decoration: underline; 
 					/*z-index: 15;*/
 				}
@@ -129,7 +135,7 @@
 					opacity: 0.9; filter: alpha(opacity = 90); 
 					border: 1px solid #628f8b; 
 					padding: 5px; 
-					text-decoration: none;
+					text-decoration: none !important;
 					/*z-index: 10;*/ 
 				}
 				.attributes dt {
@@ -218,7 +224,7 @@
 
 <xsl:template match="folia:w">
  <span id="{@xml:id}" class="word">
- 		<span class="wordtext"><xsl:value-of select="folia:t"/></span>
+ 		<xsl:value-of select="folia:t"/>
         <span class="attributes">
                 <span class="wordid"><xsl:value-of select="@xml:id" /></span>
                 <dl>
