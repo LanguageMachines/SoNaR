@@ -11,7 +11,7 @@
     <html>
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+            <!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>-->
             <xsl:choose>
              <xsl:when test="/FoLiA/metadata/imdi:METATRANSCRIPT/imdi:Session/imdi:Title">
                 <title>SoNaR - <xsl:value-of select="/FoLiA/metadata/imdi:METATRANSCRIPT/imdi:Session/imdi:Title"/></title>
@@ -183,27 +183,20 @@
 				div#iewarning {
 					width: 90%;
 					padding: 10px;
-					display: none;
 					color: red;
 					font-size: 16px;
 					font-weight: bold;
 					text-align: center;					
 				}	
             </style>     
-            <script type="text/javascript">
-            	<![CDATA[
-            	$(document).ready(function(){
-		        	if ($.browser.msie && ( ($.browser.version.slice(0,3) == "8") ||($.browser.version.slice(0,3) == "7") || ($.browser.version.slice(0,3) == "6") || ($.browser.version.slice(0,3) == "5") )) {
-		        		$('#iewarning').show();
-		        	}
-            	});
-            	]]>
-            </script> 
+
         </head>
         <body>
-        	<div id="iewarning">
-				The SoNaR viewer does not work properly with your version of Internet Explorer, please consider upgrading to Mozilla Firefox or Google Chrome instead. 
-			</div>        
+        	<xsl:comment><![CDATA[[if lte IE 10]>
+			<div id="iewarning">
+				The SoNaR viewer does not work properly with Internet Explorer, please consider upgrading to Mozilla Firefox or Google Chrome instead. 
+			</div>
+			<![endif]]]></xsl:comment>       
             <xsl:apply-templates />
         </body>
     </html>
