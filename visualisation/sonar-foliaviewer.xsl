@@ -180,25 +180,30 @@
 					font-weight: 12px;
 					font-family: monospace;
 				}
-				span#iewarning {
+				div#iewarning {
+					width: 90%;
+					padding: 10px;
 					display: none;
 					color: red;
 					font-size: 16px;
 					font-weight: bold;
+					text-align: center;					
 				}	
             </style>     
             <script type="text/javascript">
+            	<![CDATA[
             	$(document).ready(function(){
 		        	if ($.browser.msie && ($.browser.version.slice(0,3) == "8" || $.browser.version.slice(0,3) == "7" || $.browser.version.slice(0,3) == "6" || $.browser.version.slice(0,3) == "5") ) {
 		        		$('#iewarning').show();
 		        	}
             	});
+            	]]>
             </script> 
         </head>
         <body>
-        	<span id="iewarning">
+        	<div id="iewarning">
 				The SoNaR viewer does not work properly with your version of Internet Explorer, please consider upgrading to Mozilla Firefox or Google Chrome instead. 
-			</span>        
+			</div>        
             <xsl:apply-templates />
         </body>
     </html>
