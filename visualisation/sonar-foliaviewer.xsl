@@ -181,22 +181,14 @@
 
 
 
-<xsl:template match="folia:pos">
- <dt>PoS</dt><dd><xsl:value-of select="@class"/></dd>
-</xsl:template>
-
-<xsl:template match="folia:lemma">
- <dt>Lemma</dt><dd><xsl:value-of select="@class"/></dd>
-</xsl:template>
-
-
 <xsl:template match="folia:w">
  <span id="{@xml:id}" class="word">
  		<span class="t"><xsl:value-of select="folia:t"/></span>
         <span class="attributes">
                 <span class="wordid"><xsl:value-of select="@xml:id" /></span>
                 <dl>
-                        <xsl:apply-templates />
+                   	<dt>PoS</dt><dd><xsl:value-of select="folia:pos/@class"/></dd>
+					<dt>Lemma</dt><dd><xsl:value-of select="folia:lemma/@class"/></dd>                   	
                 </dl>
         </span>
  </span>
