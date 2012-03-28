@@ -193,7 +193,7 @@
             <script type="text/javascript">
             	<![CDATA[
             	$(document).ready(function(){
-		        	if ($.browser.msie && ($.browser.version.slice(0,3) == "8" || $.browser.version.slice(0,3) == "7" || $.browser.version.slice(0,3) == "6" || $.browser.version.slice(0,3) == "5") ) {
+		        	if ($.browser.msie && ( ($.browser.version.slice(0,3) == "8") ||($.browser.version.slice(0,3) == "7") || ($.browser.version.slice(0,3) == "6") || ($.browser.version.slice(0,3) == "5") )) {
 		        		$('#iewarning').show();
 		        	}
             	});
