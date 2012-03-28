@@ -169,7 +169,16 @@
 					padding: 5px;
 					background: #ddd;
 					border: 1px dashed red;
-				}           	
+				}           
+				span.attrlabel {
+					display: inline-block;
+					color: #254643;
+					font-weight: bold;
+					width: 90px;				
+				}	
+				span.attrvalue {
+					font-family: monospace;
+				}	
             </style>            
         </head>
         <body>
@@ -185,11 +194,13 @@
  <span id="{@xml:id}" class="word">
  		<span class="t"><xsl:value-of select="folia:t"/></span>
         <span class="attributes">
-                <span class="wordid"><xsl:value-of select="@xml:id" /></span>
-                <dl>
+                <span class="wordid"><xsl:value-of select="@xml:id" /></span><br />
+                <span class="attrlabel">PoS:</span> <span class="attrvalue"><xsl:value-of select="folia:pos/@class"/></span><br />
+                <span class="attrlabel">Lemma:</span> <span class="attrvalue"><xsl:value-of select="folia:lemma/@class"/></span><br />
+                <!--<dl>
                    	<dt>PoS</dt><dd><xsl:value-of select="folia:pos/@class"/></dd>
 					<dt>Lemma</dt><dd><xsl:value-of select="folia:lemma/@class"/></dd>                   	
-                </dl>
+                </dl>-->
         </span>
  </span>
  <xsl:text> </xsl:text> <!-- TODO: implement @nospace check -->
@@ -225,11 +236,7 @@
  </div>
 </xsl:template>
 
-<xsl:template match="folia:text">
- <div class="text">
- 	<xsl:apply-templates />
- </div>
-</xsl:template>
+
 
 <xsl:template match="folia:gap">
  <div class="gap">
@@ -243,6 +250,12 @@
 <xsl:template match="folia:div">
  <div class="div">
   <xsl:apply-templates />
+ </div>
+</xsl:template>
+
+<xsl:template match="folia:text">
+ <div class="text">
+ 	<xsl:apply-templates />
  </div>
 </xsl:template>
 
