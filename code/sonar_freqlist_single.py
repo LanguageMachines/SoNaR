@@ -52,11 +52,10 @@ def process(filepath):
 
 if __name__ == '__main__':    
     try:
-        inputdir = sys.argv[1]        
-        outputdir = sys.argv[2]
+        sonardir = sys.argv[1]        
         #threads = int(sys.argv[2])
     except:
-        print >>sys.stderr,"Syntax: sonar_postproc.py inputdir threads"
+        print >>sys.stderr,"Syntax: sonar_postproc.py sonardir"
         sys.exit(2)
     
     
@@ -68,7 +67,7 @@ if __name__ == '__main__':
     preindex = True
     prevcategory = None
     print >>sys.stderr,"Initialising (indexing)..."
-    processor = list(folia.CorpusFiles(inputdir,'folia.xml',"",lambda x: True, preindex))
+    processor = list(folia.CorpusFiles(sonardir,'folia.xml',"",lambda x: True, preindex))
     l = len(processor)
     print >>sys.stderr,"Processing " + str(l) + " files"
     for i, filepath in enumerate(processor):        
@@ -86,9 +85,9 @@ if __name__ == '__main__':
                 if prevcategory:
                     print >>sys.stderr,"Saving frequency lists for ", prevcategory
                     #save previous category
-                    cat_freqlist_word.save(outputdir + '/' + prevcategory +'.wordfreqlist.csv',True)
-                    cat_freqlist_lemma.save(outputdir + '/' +prevcategory+'.lemmafreqlist.csv',True)
-                    cat_freqlist_lemmapos.save(outputdir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)    
+                    cat_freqlist_word.save(sonardir + '/' + prevcategory +'.wordfreqlist.csv',True)
+                    cat_freqlist_lemma.save(sonardir + '/' +prevcategory+'.lemmafreqlist.csv',True)
+                    cat_freqlist_lemmapos.save(sonardir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)    
 
                 print >>sys.stderr,"NEW CATEGORY: ", category
 
@@ -110,9 +109,9 @@ if __name__ == '__main__':
                 
     if prevcategory:
         #save previous category
-        cat_freqlist_word.save(outputdir + '/' + prevcategory +'.wordfreqlist.csv',True)
-        cat_freqlist_lemma.save(outputdir + '/' +prevcategory+'.lemmafreqlist.csv',True)
-        cat_freqlist_lemmapos.save(outputdir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)        
+        cat_freqlist_word.save(sonardir + '/' + prevcategory +'.wordfreqlist.csv',True)
+        cat_freqlist_lemma.save(sonardir + '/' +prevcategory+'.lemmafreqlist.csv',True)
+        cat_freqlist_lemmapos.save(sonardir + '/' + prevcategory+'.lemmaposfreqlist.csv',True)        
         
 #print "Saving frequency lists by category"
         
