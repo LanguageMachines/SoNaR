@@ -25,7 +25,7 @@
 					/*background: #222222;*/
 					background: #b7c8c7;
 					font-family: sans-serif;
-					font-size: 10pt;
+					font-size: 12px;
 					margin-bottom:240px;
 				}
 
@@ -122,7 +122,7 @@
 					z-index: 24;
 				}
 
-				.word>.attributes { display: none; font-size: 12pt; font-weight: normal; }
+				.word>.attributes { display: none; font-size: 12px; font-weight: normal; }
 				.word:hover { 
 					/*text-decoration: underline;*/ 
 					z-index: 25;
@@ -136,7 +136,7 @@
 					display: block; 
 					position: absolute;
 					width: 320px; 
-					font-size: 12pt;
+					font-size: 12px;
 					left: 2em; 
 					top: 2em;
 					background: #b4d4d1; /*#FCFFD0;*/
@@ -177,11 +177,28 @@
 					width: 90px;				
 				}	
 				span.attrvalue {
+					font-weight: 12px;
 					font-family: monospace;
+				}
+				span#iewarning {
+					display: none;
+					color: red;
+					font-size: 16px;
+					font-weight: bold;
 				}	
-            </style>            
+            </style>     
+            <script type="text/javascript">
+            	$(document).ready(function(){
+		        	if ($.browser.msie && ($.browser.version.slice(0,3) == "8" || $.browser.version.slice(0,3) == "7" || $.browser.version.slice(0,3) == "6" || $.browser.version.slice(0,3) == "5") ) {
+		        		$('#iewarning').show();
+		        	}
+            	});
+            </script> 
         </head>
         <body>
+        	<span id="iewarning">
+				The SoNaR viewer does not work properly with your version of Internet Explorer, please consider upgrading to Mozilla Firefox or Google Chrome instead. 
+			</span>        
             <xsl:apply-templates />
         </body>
     </html>
@@ -195,8 +212,9 @@
  		<span class="t"><xsl:value-of select="folia:t"/></span>
         <span class="attributes">
                 <span class="wordid"><xsl:value-of select="@xml:id" /></span><br />
-                <span class="attrlabel">PoS:</span> <span class="attrvalue"><xsl:value-of select="folia:pos/@class"/></span><br />
                 <span class="attrlabel">Lemma:</span> <span class="attrvalue"><xsl:value-of select="folia:lemma/@class"/></span><br />
+                <span class="attrlabel">PoS:</span> <span class="attrvalue"><xsl:value-of select="folia:pos/@class"/></span><br />
+                
                 <!--<dl>
                    	<dt>PoS</dt><dd><xsl:value-of select="folia:pos/@class"/></dd>
 					<dt>Lemma</dt><dd><xsl:value-of select="folia:lemma/@class"/></dd>                   	
